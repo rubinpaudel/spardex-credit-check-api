@@ -180,32 +180,10 @@ const app = new Elysia()
   .get(
     "/",
     () => ({
-      message: "Welcome to Spardex API",
+      message: "Spardex Credit Scoring API",
       version: "1.0.0",
       documentation: "/swagger",
     }),
-    {
-      detail: {
-        tags: ["API"],
-        summary: "API root",
-        description: "Returns basic API information",
-      },
-    }
-  )
-  // Example authenticated endpoint
-  .get(
-    "/api/example",
-    () => ({
-      data: "This is a protected endpoint",
-      timestamp: new Date().toISOString(),
-    }),
-    {
-      detail: {
-        tags: ["API"],
-        summary: "Example endpoint",
-        description: "Example of an authenticated endpoint",
-      },
-    }
   )
   // Tier evaluation - Evaluate endpoint
   .post(
