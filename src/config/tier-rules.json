@@ -1,0 +1,251 @@
+{
+  "tiers": [
+    {
+      "tier": "EXCELLENT",
+      "enabled": {
+        "questionnaire": true,
+        "company": true,
+        "admin": true,
+        "asset": true,
+        "insurance": false,
+        "legalStatus": true,
+        "fraud": true
+      },
+      "questionnaire": {
+        "belgiumResidency": true,
+        "minAge": 18,
+        "isAdmin": true,
+        "legalIssues": "NO_GO",
+        "paymentIssuesElsewhere": "NO_GO",
+        "bankBlacklist": "NO_GO"
+      },
+      "company": {
+        "creditRatingThreshold": 90,
+        "minCompanyYears": 5,
+        "financialDisclosureRequired": true,
+        "companyActive": true,
+        "taxWithholdingHit": "NOT_ALLOWED",
+        "vatNumberValid": "REQUIRED"
+      },
+      "admin": {
+        "maxBankruptcies": 0,
+        "bankruptcyScope": 10,
+        "trackRecordYears": 3
+      },
+      "asset": {
+        "newVehiclesAllowed": true,
+        "secondHandAllowed": false,
+        "maxSecondHandAge": null,
+        "minVehicleValue": 10000,
+        "maxMileage": 6000
+      },
+      "insurance": {
+        "licenseSinceYears": 0,
+        "maxAtFaultAccidents": 0,
+        "maxNotAtFaultAccidents": 0,
+        "accidentScope": 0,
+        "maxVehicleHorsepower": 0,
+        "minDriverAge": 0
+      },
+      "fraud": {
+        "maxFraudScore": 30,
+        "adverseMedia": "NOT_ALLOWED",
+        "sanctionListHit": "NOT_ALLOWED"
+      },
+      "legalStatus": {
+        "allowedLegalForms": [
+          "BV_SRL",
+          "NV_SA",
+          "VOF_SNC",
+          "COMMV_SCOMM"
+        ]
+      }
+    },
+    {
+      "tier": "GOOD",
+      "enabled": {
+        "questionnaire": true,
+        "company": true,
+        "admin": true,
+        "asset": true,
+        "insurance": false,
+        "legalStatus": true,
+        "fraud": true
+      },
+      "questionnaire": {
+        "belgiumResidency": true,
+        "minAge": 18,
+        "isAdmin": true,
+        "legalIssues": "NO_GO",
+        "paymentIssuesElsewhere": "NO_GO",
+        "bankBlacklist": "NO_GO"
+      },
+      "company": {
+        "creditRatingThreshold": 70,
+        "minCompanyYears": 3,
+        "financialDisclosureRequired": true,
+        "companyActive": true,
+        "taxWithholdingHit": "NOT_ALLOWED",
+        "vatNumberValid": "REQUIRED"
+      },
+      "admin": {
+        "maxBankruptcies": 1,
+        "bankruptcyScope": 7,
+        "trackRecordYears": 3
+      },
+      "asset": {
+        "newVehiclesAllowed": true,
+        "secondHandAllowed": true,
+        "maxSecondHandAge": 0.5,
+        "minVehicleValue": 10000,
+        "maxMileage": 6000
+      },
+      "insurance": {
+        "licenseSinceYears": 0,
+        "maxAtFaultAccidents": 0,
+        "maxNotAtFaultAccidents": 0,
+        "accidentScope": 0,
+        "maxVehicleHorsepower": 0,
+        "minDriverAge": 0
+      },
+      "fraud": {
+        "maxFraudScore": 40,
+        "adverseMedia": "NOT_ALLOWED",
+        "sanctionListHit": "NOT_ALLOWED"
+      },
+      "legalStatus": {
+        "allowedLegalForms": [
+          "BV_SRL",
+          "NV_SA",
+          "VOF_SNC",
+          "COMMV_SCOMM"
+        ]
+      }
+    },
+    {
+      "tier": "FAIR",
+      "enabled": {
+        "questionnaire": true,
+        "company": true,
+        "admin": true,
+        "asset": true,
+        "insurance": false,
+        "legalStatus": true,
+        "fraud": true
+      },
+      "questionnaire": {
+        "belgiumResidency": true,
+        "minAge": 18,
+        "isAdmin": true,
+        "legalIssues": "NO_GO",
+        "paymentIssuesElsewhere": "NO_GO",
+        "bankBlacklist": "NO_GO"
+      },
+      "company": {
+        "creditRatingThreshold": 50,
+        "minCompanyYears": 2,
+        "financialDisclosureRequired": false,
+        "companyActive": true,
+        "taxWithholdingHit": "NOT_ALLOWED",
+        "vatNumberValid": "REQUIRED"
+      },
+      "admin": {
+        "maxBankruptcies": 2,
+        "bankruptcyScope": 5,
+        "trackRecordYears": 3
+      },
+      "asset": {
+        "newVehiclesAllowed": true,
+        "secondHandAllowed": true,
+        "maxSecondHandAge": 0.5,
+        "minVehicleValue": 10000,
+        "maxMileage": 6000
+      },
+      "insurance": {
+        "licenseSinceYears": 0,
+        "maxAtFaultAccidents": 0,
+        "maxNotAtFaultAccidents": 0,
+        "accidentScope": 0,
+        "maxVehicleHorsepower": 0,
+        "minDriverAge": 0
+      },
+      "fraud": {
+        "maxFraudScore": 60,
+        "adverseMedia": "NOT_ALLOWED",
+        "sanctionListHit": "NOT_ALLOWED"
+      },
+      "legalStatus": {
+        "allowedLegalForms": [
+          "BV_SRL",
+          "NV_SA",
+          "VOF_SNC",
+          "COMMV_SCOMM"
+        ]
+      }
+    },
+    {
+      "tier": "POOR",
+      "enabled": {
+        "questionnaire": true,
+        "company": true,
+        "admin": true,
+        "asset": true,
+        "insurance": true,
+        "legalStatus": true,
+        "fraud": true
+      },
+      "questionnaire": {
+        "belgiumResidency": true,
+        "minAge": 18,
+        "isAdmin": true,
+        "legalIssues": "MANUAL",
+        "paymentIssuesElsewhere": "MANUAL",
+        "bankBlacklist": "MANUAL"
+      },
+      "company": {
+        "creditRatingThreshold": 30,
+        "minCompanyYears": 1,
+        "financialDisclosureRequired": false,
+        "companyActive": true,
+        "taxWithholdingHit": "ALLOWED",
+        "vatNumberValid": "MANUAL"
+      },
+      "admin": {
+        "maxBankruptcies": 3,
+        "bankruptcyScope": 3,
+        "trackRecordYears": 0.5
+      },
+      "asset": {
+        "newVehiclesAllowed": true,
+        "secondHandAllowed": true,
+        "maxSecondHandAge": 3,
+        "minVehicleValue": 20000,
+        "maxMileage": 50000
+      },
+      "insurance": {
+        "licenseSinceYears": 5,
+        "maxAtFaultAccidents": 3,
+        "maxNotAtFaultAccidents": 5,
+        "accidentScope": 2,
+        "maxVehicleHorsepower": 150,
+        "minDriverAge": 25
+      },
+      "fraud": {
+        "maxFraudScore": 70,
+        "adverseMedia": "ALLOWED",
+        "sanctionListHit": "ALLOWED"
+      },
+      "legalStatus": {
+        "allowedLegalForms": [
+          "SOLE_PROPRIETORSHIP",
+          "BV_SRL",
+          "NV_SA",
+          "CV_SC",
+          "VOF_SNC",
+          "COMMV_SCOMM",
+          "VZW_ASBL"
+        ]
+      }
+    }
+  ]
+}

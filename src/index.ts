@@ -2,6 +2,14 @@ import { Elysia } from "elysia";
 import { cors } from "@elysiajs/cors";
 import { swagger } from "@elysiajs/swagger";
 import pino from "pino";
+import { ZodError } from "zod";
+import { evaluateTier } from "./services/tier-engine/tier-evaluator";
+import { logEvaluation } from "./services/tier-engine/evaluation-logger";
+import { evaluationRequestSchema } from "./schemas/evaluation-schemas";
+import {
+  toEvaluationError,
+  createValidationError,
+} from "./utils/error-handler";
 
 // Environment variable validation
 const PORT = process.env.PORT || "3000";
@@ -81,6 +89,7 @@ const app = new Elysia()
         tags: [
           { name: "Health", description: "Health check endpoints" },
           { name: "API", description: "Main API endpoints" },
+          { name: "Tier Evaluation", description: "Vehicle financing tier classification endpoints" },
         ],
         components: {
           securitySchemes: {
@@ -195,6 +204,67 @@ const app = new Elysia()
         tags: ["API"],
         summary: "Example endpoint",
         description: "Example of an authenticated endpoint",
+      },
+    }
+  )
+  // Tier evaluation - Evaluate endpoint
+  .post(
+    "/api/tiers/evaluate",
+    async ({ body, set }) => {
+      try {
+        // Validate request with Zod
+        const validationResult = evaluationRequestSchema.safeParse(body);
+
+        if (!validationResult.success) {
+          set.status = 400;
+          return createValidationError(
+            "Request validation failed",
+            {
+              errors: validationResult.error.issues.map((err) => ({
+                path: err.path.join("."),
+                message: err.message,
+              })),
+            }
+          );
+        }
+
+        const request = validationResult.data;
+
+        // Perform tier evaluation
+        const result = await evaluateTier(request);
+
+        // Log the evaluation
+        await logEvaluation(request, result);
+
+        return result;
+      } catch (error) {
+        console.error("Evaluation error:", error);
+        set.status = 500;
+        return toEvaluationError(error);
+      }
+    },
+    {
+      detail: {
+        tags: ["Tier Evaluation"],
+        summary: "Evaluate tier classification",
+        description:
+          "Evaluates a vehicle financing application and returns the assigned tier based on funnel-based criteria. Integrates with Creditsafe and VIES APIs to fetch company and VAT validation data.",
+      },
+    }
+  )
+  // Tier evaluation - Get config endpoint
+  .get(
+    "/api/tiers/config",
+    async () => {
+      const tierRules = await import("./config/tier-rules.json");
+      return tierRules.default;
+    },
+    {
+      detail: {
+        tags: ["Tier Evaluation"],
+        summary: "Get tier configuration",
+        description:
+          "Returns the current tier rules configuration including criteria for each tier level.",
       },
     }
   )
