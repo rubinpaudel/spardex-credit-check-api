@@ -1,14 +1,18 @@
 import { Elysia } from "elysia";
 import { creditCheckSchema } from "../validation/credit-check.validation";
+import { CreditCheckResponse } from "../types/response";
+import { Tier, tierToString } from "../types/tiers";
 
 export const creditCheckRoutes = new Elysia({ prefix: "/api/v1" }).post(
   "/credit-check",
-  async ({ body }) => {
-    // body is now typed and validated
+  async ({ body }): Promise<CreditCheckResponse> => {
+    const tier: Tier = Tier.EXCELLENT; // Still hardcoded
+
     return {
       success: true,
       result: {
-        tier: "excellent",
+        tier: tierToString(tier),
+        requiresManualReview: false,
         financialTerms: {
           yearlyInterestPercent: 3,
           minDownpaymentPercent: 0,
@@ -16,7 +20,10 @@ export const creditCheckRoutes = new Elysia({ prefix: "/api/v1" }).post(
           maxResidualValuePercent: 15,
           canFinanceRegistrationTax: true,
         },
+        ruleResults: [],
       },
+      requestId: crypto.randomUUID(),
+      timestamp: new Date().toISOString(),
     };
   },
   {
