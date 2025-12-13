@@ -9,3 +9,5 @@ export interface HealthResponse {
   timestamp: string;
   environment: string;
 }
+
+export * from "./rules";
