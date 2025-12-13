@@ -1,25 +1,10 @@
 import { Elysia } from "elysia";
-import { creditCheckRequestSchema } from "../types/credit-check";
+import { creditCheckSchema } from "../validation/credit-check.validation";
 
 export const creditCheckRoutes = new Elysia({ prefix: "/api/v1" }).post(
   "/credit-check",
-  async ({ body, set }) => {
-    const result = creditCheckRequestSchema.safeParse(body);
-
-    if (!result.success) {
-      set.status = 400;
-      return {
-        success: false,
-        error: {
-          message: "Validation failed",
-          details: result.error.issues.map((issue) => ({
-            field: issue.path.join("."),
-            message: issue.message,
-          })),
-        },
-      };
-    }
-
+  async ({ body }) => {
+    // body is now typed and validated
     return {
       success: true,
       result: {
@@ -35,6 +20,7 @@ export const creditCheckRoutes = new Elysia({ prefix: "/api/v1" }).post(
     };
   },
   {
+    body: creditCheckSchema,
     detail: {
       tags: ["Credit Check"],
       summary: "Perform credit check",
