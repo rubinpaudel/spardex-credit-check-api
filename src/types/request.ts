@@ -40,6 +40,16 @@ export interface WithholdingObligationInfo {
   selfDeclaredDebt: boolean; // "Do you have debts at RSZ/FOD?"
 }
 
+// TEMPORARY: Mock data until Creditsafe integration
+export interface MockData {
+  creditRating?: number; // 0-100
+  fraudScore?: number; // 0-100
+  companyAgeYears?: number;
+  adminBankruptcies?: number;
+  sanctionListHit?: boolean;
+  blocklistHit?: boolean;
+}
+
 // Full questionnaire
 export interface QuestionnaireData {
   contact: ContactInfo;
@@ -47,6 +57,9 @@ export interface QuestionnaireData {
   insuranceHistory: InsuranceHistory;
   vehicle: VehicleInfo;
   withholdingObligation: WithholdingObligationInfo;
+
+  // TEMPORARY: Mock data until Creditsafe integration
+  _mock?: MockData;
 }
 
 // Company identification
