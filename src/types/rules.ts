@@ -35,5 +35,5 @@ export interface RuleContext {
 export interface Rule {
   id: string;
   category: RuleCategory;
-  evaluate(context: RuleContext, thresholds: Record<Tier, TierThresholds>): RuleResult;
+  evaluate(context: RuleContext, thresholds: Record<Tier.EXCELLENT | Tier.GOOD | Tier.FAIR | Tier.POOR, TierThresholds>): RuleResult;
 }
