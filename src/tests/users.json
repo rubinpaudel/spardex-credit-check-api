@@ -1,0 +1,1735 @@
+{
+    "testUsers": [
+      {
+        "id": "TEST_USER_001",
+        "expectedTier": "excellent",
+        "description": "Perfect BV company - high credit, long history, clean record, new vehicle",
+        "questionnaire": {
+          "contact": {
+            "firstName": "Jan",
+            "lastName": "Vermeersch",
+            "email": "jan.vermeersch@techsolutions.be",
+            "phone": "+32 478 123 456",
+            "dateOfBirth": "1975-03-15",
+            "nationality": "BE",
+            "belgiumResident": true,
+            "isAdministrator": true,
+            "driversLicenseSinceYears": 25,
+            "adminTrackRecordYearsBelgium": 12
+          },
+          "legalHistory": {
+            "contactWithLegalAuthorities": false,
+            "troubleWithPaymentAtFinancingCompany": false,
+            "blacklistedBanks": []
+          },
+          "insuranceHistory": {
+            "accidentsAtFault": 0,
+            "accidentsNotAtFault": 1,
+            "accidentScopeYears": 5
+          },
+          "vehicle": {
+            "type": "new",
+            "horsepower": 180,
+            "value": 45000,
+            "mileage": 0,
+            "ageYears": 0
+          }
+        },
+        "company": {
+          "vatNumber": "BE0123456789",
+          "name": "Tech Solutions BV",
+          "legalForm": "BV"
+        },
+        "mockCreditsafeResponse": {
+          "companyId": "BE-X-123456789",
+          "companySummary": {
+            "businessName": "Tech Solutions BV",
+            "country": "BE",
+            "companyNumber": "0123456789",
+            "vatRegistrationNumber": "BE0123456789",
+            "companyStatus": {
+              "status": "Active"
+            },
+            "latestTurnoverFigure": {
+              "currency": "EUR",
+              "value": 2500000
+            },
+            "creditRating": {
+              "commonValue": 95,
+              "commonDescription": "Very Low Risk",
+              "creditLimit": {
+                "currency": "EUR",
+                "value": 500000
+              }
+            }
+          },
+          "companyIdentification": {
+            "basicInformation": {
+              "registeredCompanyName": "Tech Solutions BV",
+              "companyRegistrationNumber": "0123456789",
+              "vatRegistrationNumber": "BE0123456789",
+              "country": "BE",
+              "legalForm": {
+                "description": "Besloten vennootschap",
+                "code": "BV"
+              },
+              "companyStatus": {
+                "status": "Active"
+              },
+              "incorporationDate": "2015-06-12"
+            }
+          },
+          "creditScore": {
+            "currentCreditRating": {
+              "commonValue": 95
+            }
+          },
+          "financialStatements": [
+            {
+              "yearEndDate": "2023-12-31",
+              "currency": "EUR",
+              "profitAndLoss": {
+                "revenue": 2500000,
+                "profitAfterTax": 240000
+              },
+              "balanceSheet": {
+                "totalAssets": 1800000,
+                "totalShareholdersEquity": 850000
+              }
+            }
+          ],
+          "directors": [
+            {
+              "id": "DIR-001",
+              "name": "Jan Vermeersch",
+              "firstName": "Jan",
+              "surname": "Vermeersch",
+              "dateOfBirth": "1975-03-15",
+              "positions": [
+                {
+                  "positionName": "Zaakvoerder",
+                  "dateAppointed": "2015-06-12"
+                }
+              ]
+            }
+          ],
+          "additionalInformation": {
+            "fraudScore": 15,
+            "sanctionListHit": false,
+            "sanctionListJustbanBE": false,
+            "inhoudingsplichtHit": false,
+            "blocklistHit": false,
+            "adverseMedia": false
+          }
+        },
+        "mockAdminBankruptcyCheck": {
+          "administratorId": "DIR-001",
+          "bankruptcies": [],
+          "totalBankruptciesInScope": 0,
+          "scopeYears": 10
+        },
+        "mockViesResponse": {
+          "valid": true,
+          "vatNumber": "BE0123456789",
+          "name": "Tech Solutions BV",
+          "address": "Technologiepark 5, 9000 Gent"
+        },
+        "mockInhoudingsplichtResponse": {
+          "hit": false
+        },
+        "validationChecklist": {
+          "generalRequirements": {
+            "belgiumResident": "✓ true",
+            "age": "✓ 49 years (>=18)",
+            "isAdministrator": "✓ true",
+            "contactWithLegalAuthorities": "✓ false (required: No)",
+            "troubleWithPayment": "✓ false (required: No)",
+            "blacklistedBanks": "✓ none"
+          },
+          "companyCheck": {
+            "creditRating": "✓ 95 (required: >=90)",
+            "companyYears": "✓ ~10 years (required: >=5)",
+            "financialDisclosure": "✓ Yes (required: Yes)",
+            "companyActive": "✓ true",
+            "inhoudingsplicht": "✓ false (required: No)",
+            "vatValid": "✓ true"
+          },
+          "adminCheck": {
+            "bankruptcies": "✓ 0 (max: 0)",
+            "adminTrackRecord": "✓ 12 years (required: >=3)"
+          },
+          "assetCheck": {
+            "vehicleType": "✓ new (allowed: Yes)",
+            "vehicleValue": "✓ €45,000 (min: €10,000)"
+          },
+          "fraudCheck": {
+            "fraudScore": "✓ 15 (max: 30)",
+            "sanctionListHit": "✓ false",
+            "adverseMedia": "✓ false (required: No)"
+          },
+          "legalStatusCheck": {
+            "legalForm": "✓ BV (allowed: Yes)"
+          },
+          "blocklist": "✓ false"
+        }
+      },
+      {
+        "id": "TEST_USER_002",
+        "expectedTier": "excellent",
+        "description": "Large NV company - established manufacturer with top credit",
+        "questionnaire": {
+          "contact": {
+            "firstName": "Sophie",
+            "lastName": "De Wilde",
+            "email": "sophie.dewilde@industrialgroup.be",
+            "phone": "+32 475 987 654",
+            "dateOfBirth": "1968-11-22",
+            "nationality": "BE",
+            "belgiumResident": true,
+            "isAdministrator": true,
+            "driversLicenseSinceYears": 35,
+            "adminTrackRecordYearsBelgium": 20
+          },
+          "legalHistory": {
+            "contactWithLegalAuthorities": false,
+            "troubleWithPaymentAtFinancingCompany": false,
+            "blacklistedBanks": []
+          },
+          "insuranceHistory": {
+            "accidentsAtFault": 0,
+            "accidentsNotAtFault": 0,
+            "accidentScopeYears": 5
+          },
+          "vehicle": {
+            "type": "new",
+            "horsepower": 300,
+            "value": 95000,
+            "mileage": 0,
+            "ageYears": 0
+          }
+        },
+        "company": {
+          "vatNumber": "BE0987654321",
+          "name": "Industrial Group NV",
+          "legalForm": "NV"
+        },
+        "mockCreditsafeResponse": {
+          "companyId": "BE-X-987654321",
+          "companySummary": {
+            "businessName": "Industrial Group NV",
+            "country": "BE",
+            "companyNumber": "0987654321",
+            "vatRegistrationNumber": "BE0987654321",
+            "companyStatus": {
+              "status": "Active"
+            },
+            "latestTurnoverFigure": {
+              "currency": "EUR",
+              "value": 15000000
+            },
+            "creditRating": {
+              "commonValue": 92,
+              "commonDescription": "Very Low Risk",
+              "creditLimit": {
+                "currency": "EUR",
+                "value": 2000000
+              }
+            }
+          },
+          "companyIdentification": {
+            "basicInformation": {
+              "registeredCompanyName": "Industrial Group NV",
+              "companyRegistrationNumber": "0987654321",
+              "vatRegistrationNumber": "BE0987654321",
+              "country": "BE",
+              "legalForm": {
+                "description": "Naamloze Vennootschap",
+                "code": "NV"
+              },
+              "companyStatus": {
+                "status": "Active"
+              },
+              "incorporationDate": "1998-02-15"
+            }
+          },
+          "creditScore": {
+            "currentCreditRating": {
+              "commonValue": 92
+            }
+          },
+          "financialStatements": [
+            {
+              "yearEndDate": "2023-12-31",
+              "currency": "EUR",
+              "profitAndLoss": {
+                "revenue": 15000000,
+                "profitAfterTax": 1237500
+              },
+              "balanceSheet": {
+                "totalAssets": 12000000,
+                "totalShareholdersEquity": 5200000
+              }
+            }
+          ],
+          "directors": [
+            {
+              "id": "DIR-002",
+              "name": "Sophie De Wilde",
+              "firstName": "Sophie",
+              "surname": "De Wilde",
+              "dateOfBirth": "1968-11-22",
+              "positions": [
+                {
+                  "positionName": "Bestuurder",
+                  "dateAppointed": "2005-03-01"
+                }
+              ]
+            }
+          ],
+          "additionalInformation": {
+            "fraudScore": 10,
+            "sanctionListHit": false,
+            "sanctionListJustbanBE": false,
+            "inhoudingsplichtHit": false,
+            "blocklistHit": false,
+            "adverseMedia": false
+          }
+        },
+        "mockAdminBankruptcyCheck": {
+          "administratorId": "DIR-002",
+          "bankruptcies": [],
+          "totalBankruptciesInScope": 0,
+          "scopeYears": 10
+        },
+        "mockViesResponse": {
+          "valid": true,
+          "vatNumber": "BE0987654321",
+          "name": "Industrial Group NV",
+          "address": "Industrieweg 100, 2000 Antwerpen"
+        },
+        "validationChecklist": {
+          "generalRequirements": {
+            "belgiumResident": "✓ true",
+            "age": "✓ 56 years",
+            "isAdministrator": "✓ true",
+            "contactWithLegalAuthorities": "✓ false",
+            "troubleWithPayment": "✓ false",
+            "blacklistedBanks": "✓ none"
+          },
+          "companyCheck": {
+            "creditRating": "✓ 92 (>=90)",
+            "companyYears": "✓ ~27 years (>=5)",
+            "financialDisclosure": "✓ Yes",
+            "companyActive": "✓ true",
+            "inhoudingsplicht": "✓ false",
+            "vatValid": "✓ true"
+          },
+          "adminCheck": {
+            "bankruptcies": "✓ 0 (max: 0)",
+            "adminTrackRecord": "✓ 20 years (>=3)"
+          },
+          "assetCheck": {
+            "vehicleType": "✓ new",
+            "vehicleValue": "✓ €95,000 (min: €10,000)"
+          },
+          "fraudCheck": {
+            "fraudScore": "✓ 10 (max: 30)"
+          },
+          "legalStatusCheck": {
+            "legalForm": "✓ NV (allowed: Yes)"
+          }
+        }
+      },
+      {
+        "id": "TEST_USER_003",
+        "expectedTier": "good",
+        "description": "BV with good credit (78), 4 years old, 1 bankruptcy in history, new vehicle",
+        "questionnaire": {
+          "contact": {
+            "firstName": "Thomas",
+            "lastName": "Peeters",
+            "email": "thomas@consultingplus.be",
+            "phone": "+32 476 234 567",
+            "dateOfBirth": "1982-07-08",
+            "nationality": "BE",
+            "belgiumResident": true,
+            "isAdministrator": true,
+            "driversLicenseSinceYears": 20,
+            "adminTrackRecordYearsBelgium": 8
+          },
+          "legalHistory": {
+            "contactWithLegalAuthorities": false,
+            "troubleWithPaymentAtFinancingCompany": false,
+            "blacklistedBanks": []
+          },
+          "insuranceHistory": {
+            "accidentsAtFault": 1,
+            "accidentsNotAtFault": 2,
+            "accidentScopeYears": 5
+          },
+          "vehicle": {
+            "type": "new",
+            "horsepower": 200,
+            "value": 38000,
+            "mileage": 0,
+            "ageYears": 0
+          }
+        },
+        "company": {
+          "vatNumber": "BE0456789123",
+          "name": "Consulting Plus BV",
+          "legalForm": "BV"
+        },
+        "mockCreditsafeResponse": {
+          "companyId": "BE-X-456789123",
+          "companySummary": {
+            "businessName": "Consulting Plus BV",
+            "country": "BE",
+            "companyNumber": "0456789123",
+            "vatRegistrationNumber": "BE0456789123",
+            "companyStatus": {
+              "status": "Active"
+            },
+            "latestTurnoverFigure": {
+              "currency": "EUR",
+              "value": 750000
+            },
+            "creditRating": {
+              "commonValue": 78,
+              "commonDescription": "Low Risk",
+              "creditLimit": {
+                "currency": "EUR",
+                "value": 120000
+              }
+            }
+          },
+          "companyIdentification": {
+            "basicInformation": {
+              "registeredCompanyName": "Consulting Plus BV",
+              "companyRegistrationNumber": "0456789123",
+              "vatRegistrationNumber": "BE0456789123",
+              "country": "BE",
+              "legalForm": {
+                "description": "Besloten vennootschap",
+                "code": "BV"
+              },
+              "companyStatus": {
+                "status": "Active"
+              },
+              "incorporationDate": "2021-03-01"
+            }
+          },
+          "creditScore": {
+            "currentCreditRating": {
+              "commonValue": 78
+            }
+          },
+          "financialStatements": [
+            {
+              "yearEndDate": "2023-12-31",
+              "currency": "EUR",
+              "profitAndLoss": {
+                "revenue": 750000,
+                "profitAfterTax": 66000
+              },
+              "balanceSheet": {
+                "totalAssets": 420000,
+                "totalShareholdersEquity": 180000
+              }
+            }
+          ],
+          "directors": [
+            {
+              "id": "DIR-003",
+              "name": "Thomas Peeters",
+              "firstName": "Thomas",
+              "surname": "Peeters",
+              "dateOfBirth": "1982-07-08",
+              "positions": [
+                {
+                  "positionName": "Zaakvoerder",
+                  "dateAppointed": "2021-03-01"
+                }
+              ]
+            }
+          ],
+          "additionalInformation": {
+            "fraudScore": 32,
+            "sanctionListHit": false,
+            "sanctionListJustbanBE": false,
+            "inhoudingsplichtHit": false,
+            "blocklistHit": false,
+            "adverseMedia": false
+          }
+        },
+        "mockAdminBankruptcyCheck": {
+          "administratorId": "DIR-003",
+          "bankruptcies": [
+            {
+              "companyName": "Previous Ventures BV",
+              "bankruptcyDate": "2019-03-15",
+              "role": "Zaakvoerder"
+            }
+          ],
+          "totalBankruptciesInScope": 1,
+          "scopeYears": 7
+        },
+        "mockViesResponse": {
+          "valid": true,
+          "vatNumber": "BE0456789123",
+          "name": "Consulting Plus BV",
+          "address": "Businesslaan 25, 3000 Leuven"
+        },
+        "validationChecklist": {
+          "generalRequirements": {
+            "belgiumResident": "✓ true",
+            "age": "✓ 42 years",
+            "isAdministrator": "✓ true",
+            "contactWithLegalAuthorities": "✓ false",
+            "troubleWithPayment": "✓ false"
+          },
+          "companyCheck": {
+            "creditRating": "✓ 78 (>=70, <90 so not excellent)",
+            "companyYears": "✓ ~4 years (>=3)",
+            "financialDisclosure": "✓ Yes",
+            "companyActive": "✓ true",
+            "inhoudingsplicht": "✓ false",
+            "vatValid": "✓ true"
+          },
+          "adminCheck": {
+            "bankruptcies": "✓ 1 (max: 1 for good tier)",
+            "adminTrackRecord": "✓ 8 years (>=3)"
+          },
+          "assetCheck": {
+            "vehicleType": "✓ new (allowed: Yes)",
+            "vehicleValue": "✓ €38,000 (min: €10,000)"
+          },
+          "fraudCheck": {
+            "fraudScore": "✓ 32 (max: 40)"
+          },
+          "legalStatusCheck": {
+            "legalForm": "✓ BV"
+          },
+          "whyNotExcellent": "Credit rating 78 < 90, company years 4 < 5, 1 bankruptcy > 0"
+        }
+      },
+      {
+        "id": "TEST_USER_004",
+        "expectedTier": "good",
+        "description": "VOF with good credit (72), nearly new second-hand vehicle within limits",
+        "questionnaire": {
+          "contact": {
+            "firstName": "Marie",
+            "lastName": "Claessens",
+            "email": "marie@bakkerijclaessens.be",
+            "phone": "+32 472 876 543",
+            "dateOfBirth": "1979-04-12",
+            "nationality": "BE",
+            "belgiumResident": true,
+            "isAdministrator": true,
+            "driversLicenseSinceYears": 24,
+            "adminTrackRecordYearsBelgium": 6
+          },
+          "legalHistory": {
+            "contactWithLegalAuthorities": false,
+            "troubleWithPaymentAtFinancingCompany": false,
+            "blacklistedBanks": []
+          },
+          "insuranceHistory": {
+            "accidentsAtFault": 0,
+            "accidentsNotAtFault": 1,
+            "accidentScopeYears": 5
+          },
+          "vehicle": {
+            "type": "secondHand",
+            "horsepower": 130,
+            "value": 28000,
+            "mileage": 4500,
+            "ageYears": 0.4
+          }
+        },
+        "company": {
+          "vatNumber": "BE0567891234",
+          "name": "Bakkerij Claessens VOF",
+          "legalForm": "VOF"
+        },
+        "mockCreditsafeResponse": {
+          "companyId": "BE-X-567891234",
+          "companySummary": {
+            "businessName": "Bakkerij Claessens VOF",
+            "country": "BE",
+            "companyNumber": "0567891234",
+            "vatRegistrationNumber": "BE0567891234",
+            "companyStatus": {
+              "status": "Active"
+            },
+            "latestTurnoverFigure": {
+              "currency": "EUR",
+              "value": 620000
+            },
+            "creditRating": {
+              "commonValue": 72,
+              "commonDescription": "Low Risk",
+              "creditLimit": {
+                "currency": "EUR",
+                "value": 85000
+              }
+            }
+          },
+          "companyIdentification": {
+            "basicInformation": {
+              "registeredCompanyName": "Bakkerij Claessens VOF",
+              "companyRegistrationNumber": "0567891234",
+              "vatRegistrationNumber": "BE0567891234",
+              "country": "BE",
+              "legalForm": {
+                "description": "Vennootschap onder firma",
+                "code": "VOF"
+              },
+              "companyStatus": {
+                "status": "Active"
+              },
+              "incorporationDate": "2019-01-15"
+            }
+          },
+          "creditScore": {
+            "currentCreditRating": {
+              "commonValue": 72
+            }
+          },
+          "financialStatements": [
+            {
+              "yearEndDate": "2023-12-31",
+              "currency": "EUR",
+              "profitAndLoss": {
+                "revenue": 620000,
+                "profitAfterTax": 52000
+              },
+              "balanceSheet": {
+                "totalAssets": 280000,
+                "totalShareholdersEquity": 120000
+              }
+            }
+          ],
+          "directors": [
+            {
+              "id": "DIR-004",
+              "name": "Marie Claessens",
+              "firstName": "Marie",
+              "surname": "Claessens",
+              "dateOfBirth": "1979-04-12",
+              "positions": [
+                {
+                  "positionName": "Vennoot",
+                  "dateAppointed": "2019-01-15"
+                }
+              ]
+            }
+          ],
+          "additionalInformation": {
+            "fraudScore": 25,
+            "sanctionListHit": false,
+            "sanctionListJustbanBE": false,
+            "inhoudingsplichtHit": false,
+            "blocklistHit": false,
+            "adverseMedia": false
+          }
+        },
+        "mockAdminBankruptcyCheck": {
+          "administratorId": "DIR-004",
+          "bankruptcies": [],
+          "totalBankruptciesInScope": 0,
+          "scopeYears": 7
+        },
+        "mockViesResponse": {
+          "valid": true,
+          "vatNumber": "BE0567891234",
+          "name": "Bakkerij Claessens VOF",
+          "address": "Bakkerijstraat 10, 2800 Mechelen"
+        },
+        "validationChecklist": {
+          "generalRequirements": "✓ All passed",
+          "companyCheck": {
+            "creditRating": "✓ 72 (>=70, <90)",
+            "companyYears": "✓ ~6 years (>=3)",
+            "financialDisclosure": "✓ Yes"
+          },
+          "adminCheck": {
+            "bankruptcies": "✓ 0 (max: 1)",
+            "adminTrackRecord": "✓ 6 years (>=3)"
+          },
+          "assetCheck": {
+            "vehicleType": "✓ secondHand (allowed for Good: Yes)",
+            "vehicleAge": "✓ 0.4 years (max: 0.5)",
+            "vehicleMileage": "✓ 4,500 km (max: 6,000)",
+            "vehicleValue": "✓ €28,000 (min: €10,000)"
+          },
+          "fraudCheck": {
+            "fraudScore": "✓ 25 (max: 40)"
+          },
+          "legalStatusCheck": {
+            "legalForm": "✓ VOF"
+          },
+          "whyNotExcellent": "Credit rating 72 < 90, company years 6 < 5 would be ok but credit disqualifies"
+        }
+      },
+      {
+        "id": "TEST_USER_005",
+        "expectedTier": "fair",
+        "description": "BV with fair credit (55), 2.5 years old, 2 bankruptcies, new vehicle",
+        "questionnaire": {
+          "contact": {
+            "firstName": "Kevin",
+            "lastName": "Janssens",
+            "email": "kevin@quickfix.be",
+            "phone": "+32 479 345 678",
+            "dateOfBirth": "1985-12-03",
+            "nationality": "BE",
+            "belgiumResident": true,
+            "isAdministrator": true,
+            "driversLicenseSinceYears": 18,
+            "adminTrackRecordYearsBelgium": 5
+          },
+          "legalHistory": {
+            "contactWithLegalAuthorities": false,
+            "troubleWithPaymentAtFinancingCompany": false,
+            "blacklistedBanks": []
+          },
+          "insuranceHistory": {
+            "accidentsAtFault": 2,
+            "accidentsNotAtFault": 3,
+            "accidentScopeYears": 3
+          },
+          "vehicle": {
+            "type": "new",
+            "horsepower": 160,
+            "value": 32000,
+            "mileage": 0,
+            "ageYears": 0
+          }
+        },
+        "company": {
+          "vatNumber": "BE0678912345",
+          "name": "QuickFix BV",
+          "legalForm": "BV"
+        },
+        "mockCreditsafeResponse": {
+          "companyId": "BE-X-678912345",
+          "companySummary": {
+            "businessName": "QuickFix BV",
+            "country": "BE",
+            "companyNumber": "0678912345",
+            "vatRegistrationNumber": "BE0678912345",
+            "companyStatus": {
+              "status": "Active"
+            },
+            "latestTurnoverFigure": {
+              "currency": "EUR",
+              "value": 320000
+            },
+            "creditRating": {
+              "commonValue": 55,
+              "commonDescription": "Moderate Risk",
+              "creditLimit": {
+                "currency": "EUR",
+                "value": 35000
+              }
+            }
+          },
+          "companyIdentification": {
+            "basicInformation": {
+              "registeredCompanyName": "QuickFix BV",
+              "companyRegistrationNumber": "0678912345",
+              "vatRegistrationNumber": "BE0678912345",
+              "country": "BE",
+              "legalForm": {
+                "description": "Besloten vennootschap",
+                "code": "BV"
+              },
+              "companyStatus": {
+                "status": "Active"
+              },
+              "incorporationDate": "2022-06-01"
+            }
+          },
+          "creditScore": {
+            "currentCreditRating": {
+              "commonValue": 55
+            }
+          },
+          "financialStatements": [],
+          "directors": [
+            {
+              "id": "DIR-005",
+              "name": "Kevin Janssens",
+              "firstName": "Kevin",
+              "surname": "Janssens",
+              "dateOfBirth": "1985-12-03",
+              "positions": [
+                {
+                  "positionName": "Zaakvoerder",
+                  "dateAppointed": "2022-06-01"
+                }
+              ]
+            }
+          ],
+          "additionalInformation": {
+            "fraudScore": 52,
+            "sanctionListHit": false,
+            "sanctionListJustbanBE": false,
+            "inhoudingsplichtHit": false,
+            "blocklistHit": false,
+            "adverseMedia": false
+          }
+        },
+        "mockAdminBankruptcyCheck": {
+          "administratorId": "DIR-005",
+          "bankruptcies": [
+            {
+              "companyName": "ElectroPro BV",
+              "bankruptcyDate": "2020-08-20",
+              "role": "Zaakvoerder"
+            },
+            {
+              "companyName": "FastElectric BV",
+              "bankruptcyDate": "2021-11-10",
+              "role": "Zaakvoerder"
+            }
+          ],
+          "totalBankruptciesInScope": 2,
+          "scopeYears": 5
+        },
+        "mockViesResponse": {
+          "valid": true,
+          "vatNumber": "BE0678912345",
+          "name": "QuickFix BV",
+          "address": "Elektriciteitsweg 8, 9000 Gent"
+        },
+        "validationChecklist": {
+          "generalRequirements": "✓ All passed",
+          "companyCheck": {
+            "creditRating": "✓ 55 (>=50, <70)",
+            "companyYears": "✓ ~2.5 years (>=2)",
+            "financialDisclosure": "✓ Not required for Fair tier",
+            "companyActive": "✓ true",
+            "inhoudingsplicht": "✓ false"
+          },
+          "adminCheck": {
+            "bankruptcies": "✓ 2 (max: 2 for Fair)",
+            "adminTrackRecord": "✓ 5 years (>=3)"
+          },
+          "assetCheck": {
+            "vehicleType": "✓ new",
+            "vehicleValue": "✓ €32,000 (min: €10,000)"
+          },
+          "fraudCheck": {
+            "fraudScore": "✓ 52 (max: 60)"
+          },
+          "legalStatusCheck": {
+            "legalForm": "✓ BV"
+          },
+          "whyNotGood": "Credit rating 55 < 70, 2 bankruptcies > 1"
+        }
+      },
+      {
+        "id": "TEST_USER_006",
+        "expectedTier": "fair",
+        "description": "CommV with moderate credit (58), nearly new second-hand vehicle, higher fraud score",
+        "questionnaire": {
+          "contact": {
+            "firstName": "Lisa",
+            "lastName": "Martens",
+            "email": "lisa@designstudio.be",
+            "phone": "+32 473 456 789",
+            "dateOfBirth": "1990-08-25",
+            "nationality": "BE",
+            "belgiumResident": true,
+            "isAdministrator": true,
+            "driversLicenseSinceYears": 12,
+            "adminTrackRecordYearsBelgium": 4
+          },
+          "legalHistory": {
+            "contactWithLegalAuthorities": false,
+            "troubleWithPaymentAtFinancingCompany": false,
+            "blacklistedBanks": []
+          },
+          "insuranceHistory": {
+            "accidentsAtFault": 1,
+            "accidentsNotAtFault": 2,
+            "accidentScopeYears": 3
+          },
+          "vehicle": {
+            "type": "secondHand",
+            "horsepower": 180,
+            "value": 25000,
+            "mileage": 5500,
+            "ageYears": 0.4
+          }
+        },
+        "company": {
+          "vatNumber": "BE0789123456",
+          "name": "Design Studio CommV",
+          "legalForm": "CommV"
+        },
+        "mockCreditsafeResponse": {
+          "companyId": "BE-X-789123456",
+          "companySummary": {
+            "businessName": "Design Studio CommV",
+            "country": "BE",
+            "companyNumber": "0789123456",
+            "vatRegistrationNumber": "BE0789123456",
+            "companyStatus": {
+              "status": "Active"
+            },
+            "latestTurnoverFigure": {
+              "currency": "EUR",
+              "value": 185000
+            },
+            "creditRating": {
+              "commonValue": 58,
+              "commonDescription": "Moderate Risk",
+              "creditLimit": {
+                "currency": "EUR",
+                "value": 28000
+              }
+            }
+          },
+          "companyIdentification": {
+            "basicInformation": {
+              "registeredCompanyName": "Design Studio CommV",
+              "companyRegistrationNumber": "0789123456",
+              "vatRegistrationNumber": "BE0789123456",
+              "country": "BE",
+              "legalForm": {
+                "description": "Commanditaire vennootschap",
+                "code": "CommV"
+              },
+              "companyStatus": {
+                "status": "Active"
+              },
+              "incorporationDate": "2021-11-01"
+            }
+          },
+          "creditScore": {
+            "currentCreditRating": {
+              "commonValue": 58
+            }
+          },
+          "financialStatements": [],
+          "directors": [
+            {
+              "id": "DIR-006",
+              "name": "Lisa Martens",
+              "firstName": "Lisa",
+              "surname": "Martens",
+              "dateOfBirth": "1990-08-25",
+              "positions": [
+                {
+                  "positionName": "Beherende Vennoot",
+                  "dateAppointed": "2021-11-01"
+                }
+              ]
+            }
+          ],
+          "additionalInformation": {
+            "fraudScore": 55,
+            "sanctionListHit": false,
+            "sanctionListJustbanBE": false,
+            "inhoudingsplichtHit": false,
+            "blocklistHit": false,
+            "adverseMedia": false
+          }
+        },
+        "mockAdminBankruptcyCheck": {
+          "administratorId": "DIR-006",
+          "bankruptcies": [],
+          "totalBankruptciesInScope": 0,
+          "scopeYears": 5
+        },
+        "mockViesResponse": {
+          "valid": true,
+          "vatNumber": "BE0789123456",
+          "name": "Design Studio CommV",
+          "address": "Creatieflaan 15, 1000 Brussel"
+        },
+        "validationChecklist": {
+          "generalRequirements": "✓ All passed",
+          "companyCheck": {
+            "creditRating": "✓ 58 (>=50, <70)",
+            "companyYears": "✓ ~3 years (>=2)"
+          },
+          "adminCheck": {
+            "bankruptcies": "✓ 0 (max: 2)",
+            "adminTrackRecord": "✓ 4 years (>=3)"
+          },
+          "assetCheck": {
+            "vehicleType": "✓ secondHand (allowed for Fair)",
+            "vehicleAge": "✓ 0.4 years (max: 0.5)",
+            "vehicleMileage": "✓ 5,500 km (max: 6,000)",
+            "vehicleValue": "✓ €25,000 (min: €10,000)"
+          },
+          "fraudCheck": {
+            "fraudScore": "✓ 55 (max: 60)"
+          },
+          "legalStatusCheck": {
+            "legalForm": "✓ CommV"
+          },
+          "whyNotGood": "Credit rating 58 < 70, fraud score 55 > 40"
+        }
+      },
+      {
+        "id": "TEST_USER_007",
+        "expectedTier": "poor",
+        "description": "Sole proprietorship (Eenmanszaak), low credit (38), inhoudingsplicht hit, 3 bankruptcies",
+        "questionnaire": {
+          "contact": {
+            "firstName": "Dirk",
+            "lastName": "Willems",
+            "email": "dirk.willems@gmail.com",
+            "phone": "+32 477 567 890",
+            "dateOfBirth": "1972-05-18",
+            "nationality": "BE",
+            "belgiumResident": true,
+            "isAdministrator": true,
+            "driversLicenseSinceYears": 30,
+            "adminTrackRecordYearsBelgium": 1
+          },
+          "legalHistory": {
+            "contactWithLegalAuthorities": false,
+            "troubleWithPaymentAtFinancingCompany": false,
+            "blacklistedBanks": []
+          },
+          "insuranceHistory": {
+            "accidentsAtFault": 2,
+            "accidentsNotAtFault": 3,
+            "accidentScopeYears": 2
+          },
+          "vehicle": {
+            "type": "secondHand",
+            "horsepower": 120,
+            "value": 25000,
+            "mileage": 42000,
+            "ageYears": 2.5
+          }
+        },
+        "company": {
+          "vatNumber": "BE0891234567",
+          "name": "Dirk Willems Handyman",
+          "legalForm": "Eenmanszaak"
+        },
+        "mockCreditsafeResponse": {
+          "companyId": "BE-X-891234567",
+          "companySummary": {
+            "businessName": "Dirk Willems Handyman",
+            "country": "BE",
+            "companyNumber": "0891234567",
+            "vatRegistrationNumber": "BE0891234567",
+            "companyStatus": {
+              "status": "Active"
+            },
+            "latestTurnoverFigure": {
+              "currency": "EUR",
+              "value": 85000
+            },
+            "creditRating": {
+              "commonValue": 38,
+              "commonDescription": "High Risk",
+              "creditLimit": {
+                "currency": "EUR",
+                "value": 8000
+              }
+            }
+          },
+          "companyIdentification": {
+            "basicInformation": {
+              "registeredCompanyName": "Dirk Willems Handyman",
+              "companyRegistrationNumber": "0891234567",
+              "vatRegistrationNumber": "BE0891234567",
+              "country": "BE",
+              "legalForm": {
+                "description": "Eenmanszaak",
+                "code": "Eenmanszaak"
+              },
+              "companyStatus": {
+                "status": "Active"
+              },
+              "incorporationDate": "2023-06-15"
+            }
+          },
+          "creditScore": {
+            "currentCreditRating": {
+              "commonValue": 38
+            }
+          },
+          "financialStatements": [],
+          "directors": [
+            {
+              "id": "DIR-007",
+              "name": "Dirk Willems",
+              "firstName": "Dirk",
+              "surname": "Willems",
+              "dateOfBirth": "1972-05-18",
+              "positions": [
+                {
+                  "positionName": "Eigenaar",
+                  "dateAppointed": "2023-06-15"
+                }
+              ]
+            }
+          ],
+          "additionalInformation": {
+            "fraudScore": 65,
+            "sanctionListHit": false,
+            "sanctionListJustbanBE": false,
+            "inhoudingsplichtHit": true,
+            "blocklistHit": false,
+            "adverseMedia": true
+          }
+        },
+        "mockAdminBankruptcyCheck": {
+          "administratorId": "DIR-007",
+          "bankruptcies": [
+            {
+              "companyName": "Willems Construction BV",
+              "bankruptcyDate": "2022-01-20",
+              "role": "Zaakvoerder"
+            },
+            {
+              "companyName": "BuildRight BV",
+              "bankruptcyDate": "2022-09-05",
+              "role": "Zaakvoerder"
+            },
+            {
+              "companyName": "HandyWorks VOF",
+              "bankruptcyDate": "2023-02-14",
+              "role": "Vennoot"
+            }
+          ],
+          "totalBankruptciesInScope": 3,
+          "scopeYears": 3
+        },
+        "mockViesResponse": {
+          "valid": false,
+          "vatNumber": "BE0891234567",
+          "name": null,
+          "address": null,
+          "requiresManualReview": true
+        },
+        "validationChecklist": {
+          "generalRequirements": "✓ All passed",
+          "companyCheck": {
+            "creditRating": "✓ 38 (>=30, <50)",
+            "companyYears": "✓ ~1.5 years (>=1)",
+            "financialDisclosure": "✓ Not required for Poor",
+            "companyActive": "✓ true",
+            "inhoudingsplicht": "✓ true (allowed for Poor tier: Yes)",
+            "vatValid": "Manual review (allowed for Poor)"
+          },
+          "adminCheck": {
+            "bankruptcies": "✓ 3 (max: 3 for Poor)",
+            "adminTrackRecord": "✓ 1 year (>=0.5)"
+          },
+          "insuranceCheck": {
+            "driversLicense5y": "✓ 30 years (required: Yes)",
+            "accidentsAtFault": "✓ 2 (max: 3)",
+            "accidentsNotAtFault": "✓ 3 (max: 5)",
+            "minDriverAge": "✓ 52 years (min: 25)",
+            "maxVehicleHP": "✓ 120 (max: 150)"
+          },
+          "assetCheck": {
+            "vehicleType": "✓ secondHand (allowed: Yes)",
+            "vehicleAge": "✓ 2.5 years (max: 3)",
+            "vehicleMileage": "✓ 42,000 km (max: 50,000)",
+            "vehicleValue": "✓ €25,000 (min: €20,000)"
+          },
+          "fraudCheck": {
+            "fraudScore": "✓ 65 (max: 70)",
+            "adverseMedia": "✓ true (allowed for Poor: Yes)"
+          },
+          "legalStatusCheck": {
+            "legalForm": "✓ Eenmanszaak (allowed for Poor: Yes)"
+          },
+          "whyNotFair": "Credit rating 38 < 50, 3 bankruptcies > 2, inhoudingsplicht hit, Eenmanszaak not allowed for Fair"
+        }
+      },
+      {
+        "id": "TEST_USER_008",
+        "expectedTier": "poor",
+        "description": "VZW with low credit (35), payment trouble flagged for manual review, older second-hand vehicle",
+        "questionnaire": {
+          "contact": {
+            "firstName": "Rita",
+            "lastName": "Van Damme",
+            "email": "rita@socialhelp.be",
+            "phone": "+32 478 678 901",
+            "dateOfBirth": "1965-02-28",
+            "nationality": "BE",
+            "belgiumResident": true,
+            "isAdministrator": true,
+            "driversLicenseSinceYears": 38,
+            "adminTrackRecordYearsBelgium": 2
+          },
+          "legalHistory": {
+            "contactWithLegalAuthorities": false,
+            "troubleWithPaymentAtFinancingCompany": true,
+            "blacklistedBanks": []
+          },
+          "insuranceHistory": {
+            "accidentsAtFault": 1,
+            "accidentsNotAtFault": 2,
+            "accidentScopeYears": 2
+          },
+          "vehicle": {
+            "type": "secondHand",
+            "horsepower": 100,
+            "value": 22000,
+            "mileage": 38000,
+            "ageYears": 2
+          }
+        },
+        "company": {
+          "vatNumber": "BE0912345678",
+          "name": "Social Help VZW",
+          "legalForm": "VZW"
+        },
+        "mockCreditsafeResponse": {
+          "companyId": "BE-X-912345678",
+          "companySummary": {
+            "businessName": "Social Help VZW",
+            "country": "BE",
+            "companyNumber": "0912345678",
+            "vatRegistrationNumber": "BE0912345678",
+            "companyStatus": {
+              "status": "Active"
+            },
+            "latestTurnoverFigure": {
+              "currency": "EUR",
+              "value": 120000
+            },
+            "creditRating": {
+              "commonValue": 35,
+              "commonDescription": "High Risk",
+              "creditLimit": {
+                "currency": "EUR",
+                "value": 10000
+              }
+            }
+          },
+          "companyIdentification": {
+            "basicInformation": {
+              "registeredCompanyName": "Social Help VZW",
+              "companyRegistrationNumber": "0912345678",
+              "vatRegistrationNumber": "BE0912345678",
+              "country": "BE",
+              "legalForm": {
+                "description": "Vereniging zonder winstoogmerk",
+                "code": "VZW"
+              },
+              "companyStatus": {
+                "status": "Active"
+              },
+              "incorporationDate": "2022-03-01"
+            }
+          },
+          "creditScore": {
+            "currentCreditRating": {
+              "commonValue": 35
+            }
+          },
+          "financialStatements": [],
+          "directors": [
+            {
+              "id": "DIR-008",
+              "name": "Rita Van Damme",
+              "firstName": "Rita",
+              "surname": "Van Damme",
+              "dateOfBirth": "1965-02-28",
+              "positions": [
+                {
+                  "positionName": "Bestuurder",
+                  "dateAppointed": "2022-03-01"
+                }
+              ]
+            }
+          ],
+          "additionalInformation": {
+            "fraudScore": 58,
+            "sanctionListHit": false,
+            "sanctionListJustbanBE": false,
+            "inhoudingsplichtHit": false,
+            "blocklistHit": false,
+            "adverseMedia": false
+          }
+        },
+        "mockAdminBankruptcyCheck": {
+          "administratorId": "DIR-008",
+          "bankruptcies": [
+            {
+              "companyName": "Community Care VZW",
+              "bankruptcyDate": "2023-05-10",
+              "role": "Bestuurder"
+            }
+          ],
+          "totalBankruptciesInScope": 1,
+          "scopeYears": 3
+        },
+        "mockViesResponse": {
+          "valid": true,
+          "vatNumber": "BE0912345678",
+          "name": "Social Help VZW",
+          "address": "Hulpstraat 20, 2000 Antwerpen"
+        },
+        "validationChecklist": {
+          "generalRequirements": {
+            "troubleWithPayment": "⚠️ true - requires manual review (Poor tier: No/Yes Manual)"
+          },
+          "companyCheck": {
+            "creditRating": "✓ 35 (>=30, <50)"
+          },
+          "adminCheck": {
+            "bankruptcies": "✓ 1 (max: 3)"
+          },
+          "insuranceCheck": {
+            "driversLicense5y": "✓ 38 years",
+            "accidentsAtFault": "✓ 1 (max: 3)",
+            "minDriverAge": "✓ 59 years (min: 25)",
+            "maxVehicleHP": "✓ 100 (max: 150)"
+          },
+          "assetCheck": {
+            "vehicleAge": "✓ 2 years (max: 3)",
+            "vehicleMileage": "✓ 38,000 km (max: 50,000)",
+            "vehicleValue": "✓ €22,000 (min: €20,000)"
+          },
+          "legalStatusCheck": {
+            "legalForm": "✓ VZW (allowed for Poor: Yes)"
+          },
+          "whyNotFair": "Credit 35 < 50, VZW not allowed for Fair, payment trouble history",
+          "requiresManualReview": true
+        }
+      },
+      {
+        "id": "TEST_USER_009",
+        "expectedTier": "rejected",
+        "description": "Inactive company, very low credit (22), sanction list hit, 4 bankruptcies, blocklist hit",
+        "questionnaire": {
+          "contact": {
+            "firstName": "Marc",
+            "lastName": "Dubois",
+            "email": "marc.dubois@tradingco.be",
+            "phone": "+32 474 789 012",
+            "dateOfBirth": "1980-09-10",
+            "nationality": "BE",
+            "belgiumResident": true,
+            "isAdministrator": true,
+            "driversLicenseSinceYears": 22,
+            "adminTrackRecordYearsBelgium": 0.3
+          },
+          "legalHistory": {
+            "contactWithLegalAuthorities": true,
+            "troubleWithPaymentAtFinancingCompany": true,
+            "blacklistedBanks": ["Bank X", "Bank Y"]
+          },
+          "insuranceHistory": {
+            "accidentsAtFault": 4,
+            "accidentsNotAtFault": 6,
+            "accidentScopeYears": 2
+          },
+          "vehicle": {
+            "type": "secondHand",
+            "horsepower": 200,
+            "value": 18000,
+            "mileage": 120000,
+            "ageYears": 5
+          }
+        },
+        "company": {
+          "vatNumber": "BE0234567891",
+          "name": "Trading Co BV",
+          "legalForm": "BV"
+        },
+        "mockCreditsafeResponse": {
+          "companyId": "BE-X-234567891",
+          "companySummary": {
+            "businessName": "Trading Co BV",
+            "country": "BE",
+            "companyNumber": "0234567891",
+            "vatRegistrationNumber": "BE0234567891",
+            "companyStatus": {
+              "status": "Inactive"
+            },
+            "latestTurnoverFigure": {
+              "currency": "EUR",
+              "value": 0
+            },
+            "creditRating": {
+              "commonValue": 22,
+              "commonDescription": "Very High Risk",
+              "creditLimit": {
+                "currency": "EUR",
+                "value": 0
+              }
+            }
+          },
+          "companyIdentification": {
+            "basicInformation": {
+              "registeredCompanyName": "Trading Co BV",
+              "companyRegistrationNumber": "0234567891",
+              "vatRegistrationNumber": "BE0234567891",
+              "country": "BE",
+              "legalForm": {
+                "description": "Besloten vennootschap",
+                "code": "BV"
+              },
+              "companyStatus": {
+                "status": "Inactive",
+                "description": "In vereffening"
+              },
+              "incorporationDate": "2024-01-15"
+            }
+          },
+          "creditScore": {
+            "currentCreditRating": {
+              "commonValue": 22
+            }
+          },
+          "financialStatements": [],
+          "directors": [
+            {
+              "id": "DIR-009",
+              "name": "Marc Dubois",
+              "firstName": "Marc",
+              "surname": "Dubois",
+              "dateOfBirth": "1980-09-10",
+              "positions": [
+                {
+                  "positionName": "Zaakvoerder",
+                  "dateAppointed": "2024-01-15"
+                }
+              ]
+            }
+          ],
+          "additionalInformation": {
+            "fraudScore": 85,
+            "sanctionListHit": true,
+            "sanctionListJustbanBE": true,
+            "inhoudingsplichtHit": true,
+            "blocklistHit": true,
+            "adverseMedia": true
+          }
+        },
+        "mockAdminBankruptcyCheck": {
+          "administratorId": "DIR-009",
+          "bankruptcies": [
+            {
+              "companyName": "Import Export BV",
+              "bankruptcyDate": "2023-03-01",
+              "role": "Zaakvoerder"
+            },
+            {
+              "companyName": "QuickTrade BV",
+              "bankruptcyDate": "2023-08-15",
+              "role": "Zaakvoerder"
+            },
+            {
+              "companyName": "GlobalGoods BV",
+              "bankruptcyDate": "2024-02-20",
+              "role": "Zaakvoerder"
+            },
+            {
+              "companyName": "FastShip VOF",
+              "bankruptcyDate": "2024-06-10",
+              "role": "Vennoot"
+            }
+          ],
+          "totalBankruptciesInScope": 4,
+          "scopeYears": 3
+        },
+        "mockViesResponse": {
+          "valid": false,
+          "vatNumber": "BE0234567891",
+          "name": null,
+          "address": null
+        },
+        "rejectionReasons": [
+          "Credit rating 22 < 30 (minimum for any tier)",
+          "Company status: Inactive (required: Active for all tiers)",
+          "Blocklist hit: true (required: No for all tiers)",
+          "Sanction list hit: true (requires manual review even for Poor)",
+          "4 bankruptcies > 3 (max for Poor tier)",
+          "Fraud score 85 > 70 (max for Poor tier)",
+          "Admin track record 0.3 years < 0.5 (min for Poor)",
+          "4 accidents at fault > 3 (max for Poor)",
+          "6 accidents not at fault > 5 (max for Poor)",
+          "Vehicle value €18,000 < €20,000 (min for Poor)",
+          "Vehicle mileage 120,000 > 50,000 (max for Poor)",
+          "Vehicle age 5 years > 3 (max for Poor)",
+          "Vehicle horsepower 200 > 150 (max for Poor)"
+        ]
+      },
+      {
+        "id": "TEST_USER_010",
+        "expectedTier": "rejected",
+        "description": "Non-resident, under 18, not administrator - multiple hard rejection criteria",
+        "questionnaire": {
+          "contact": {
+            "firstName": "Alex",
+            "lastName": "Schmidt",
+            "email": "alex.schmidt@example.de",
+            "phone": "+49 151 234 5678",
+            "dateOfBirth": "2008-03-20",
+            "nationality": "DE",
+            "belgiumResident": false,
+            "isAdministrator": false,
+            "driversLicenseSinceYears": 0,
+            "adminTrackRecordYearsBelgium": 0
+          },
+          "legalHistory": {
+            "contactWithLegalAuthorities": true,
+            "troubleWithPaymentAtFinancingCompany": true,
+            "blacklistedBanks": ["All Banks"]
+          },
+          "insuranceHistory": {
+            "accidentsAtFault": 0,
+            "accidentsNotAtFault": 0,
+            "accidentScopeYears": 0
+          },
+          "vehicle": {
+            "type": "new",
+            "horsepower": 500,
+            "value": 5000,
+            "mileage": 0,
+            "ageYears": 0
+          }
+        },
+        "company": {
+          "vatNumber": "BE0345678912",
+          "name": "Ghost Company BV",
+          "legalForm": "BV"
+        },
+        "mockCreditsafeResponse": {
+          "companyId": "BE-X-345678912",
+          "companySummary": {
+            "businessName": "Ghost Company BV",
+            "country": "BE",
+            "companyNumber": "0345678912",
+            "vatRegistrationNumber": "BE0345678912",
+            "companyStatus": {
+              "status": "Inactive"
+            },
+            "creditRating": {
+              "commonValue": 5,
+              "commonDescription": "Maximum Risk",
+              "creditLimit": {
+                "currency": "EUR",
+                "value": 0
+              }
+            }
+          },
+          "companyIdentification": {
+            "basicInformation": {
+              "registeredCompanyName": "Ghost Company BV",
+              "companyRegistrationNumber": "0345678912",
+              "vatRegistrationNumber": "BE0345678912",
+              "country": "BE",
+              "legalForm": {
+                "description": "Besloten vennootschap",
+                "code": "BV"
+              },
+              "companyStatus": {
+                "status": "Inactive",
+                "description": "Doorgehaald"
+              },
+              "incorporationDate": "2024-10-01"
+            }
+          },
+          "creditScore": {
+            "currentCreditRating": {
+              "commonValue": 5
+            }
+          },
+          "financialStatements": [],
+          "directors": [],
+          "additionalInformation": {
+            "fraudScore": 98,
+            "sanctionListHit": true,
+            "sanctionListJustbanBE": true,
+            "inhoudingsplichtHit": true,
+            "blocklistHit": true,
+            "adverseMedia": true
+          }
+        },
+        "mockAdminBankruptcyCheck": {
+          "administratorId": null,
+          "bankruptcies": [],
+          "totalBankruptciesInScope": 0,
+          "scopeYears": 0
+        },
+        "mockViesResponse": {
+          "valid": false,
+          "vatNumber": "BE0345678912",
+          "name": null,
+          "address": null
+        },
+        "rejectionReasons": [
+          "Belgium residency: false (required for all tiers)",
+          "Age: 16 years < 18 (minimum for all tiers)",
+          "Is administrator: false (required for all tiers)",
+          "Credit rating 5 < 30",
+          "Company inactive",
+          "Blocklist hit",
+          "No drivers license",
+          "Vehicle value €5,000 < €10,000 (min for any tier)",
+          "Vehicle HP 500 > 150 (max for Poor if insurance check applies)"
+        ]
+      }
+    ],
+    "tierDefinitions": {
+      "excellent": {
+        "creditRatingMin": 90,
+        "minCompanyYears": 5,
+        "requiresFinancialDisclosure": true,
+        "maxAdminBankruptcies": 0,
+        "bankruptcyScopeYears": 10,
+        "minAdminTrackRecordYears": 3,
+        "fraudScoreMax": 30,
+        "allowedLegalForms": ["BV", "NV", "VOF", "CommV"],
+        "allowsSecondHand": false,
+        "minVehicleValue": 10000,
+        "maxSecondHandMileage": 6000,
+        "maxSecondHandAge": null,
+        "inhoudingsplichtAllowed": false,
+        "sanctionListAllowed": false,
+        "adverseMediaAllowed": false,
+        "financialConsequences": {
+          "yearlyInterestPercent": 3,
+          "minDownpaymentPercent": 0,
+          "maxFinancingPeriodMonths": 60,
+          "maxResidualValuePercent": 15,
+          "canFinanceRegistrationTax": true
+        }
+      },
+      "good": {
+        "creditRatingMin": 70,
+        "minCompanyYears": 3,
+        "requiresFinancialDisclosure": true,
+        "maxAdminBankruptcies": 1,
+        "bankruptcyScopeYears": 7,
+        "minAdminTrackRecordYears": 3,
+        "fraudScoreMax": 40,
+        "allowedLegalForms": ["BV", "NV", "VOF", "CommV"],
+        "allowsSecondHand": true,
+        "minVehicleValue": 10000,
+        "maxSecondHandMileage": 6000,
+        "maxSecondHandAge": 0.5,
+        "inhoudingsplichtAllowed": false,
+        "sanctionListAllowed": false,
+        "adverseMediaAllowed": false,
+        "financialConsequences": {
+          "yearlyInterestPercent": 5.5,
+          "minDownpaymentPercent": 0,
+          "maxFinancingPeriodMonths": 60,
+          "maxResidualValuePercent": 15,
+          "canFinanceRegistrationTax": true
+        }
+      },
+      "fair": {
+        "creditRatingMin": 50,
+        "minCompanyYears": 2,
+        "requiresFinancialDisclosure": false,
+        "maxAdminBankruptcies": 2,
+        "bankruptcyScopeYears": 5,
+        "minAdminTrackRecordYears": 3,
+        "fraudScoreMax": 60,
+        "allowedLegalForms": ["BV", "VOF", "CommV"],
+        "allowsSecondHand": true,
+        "minVehicleValue": 10000,
+        "maxSecondHandMileage": 6000,
+        "maxSecondHandAge": 0.5,
+        "inhoudingsplichtAllowed": false,
+        "sanctionListAllowed": false,
+        "adverseMediaAllowed": false,
+        "financialConsequences": {
+          "yearlyInterestPercent": 12,
+          "minDownpaymentPercent": 10,
+          "maxFinancingPeriodMonths": 60,
+          "maxResidualValuePercent": 15,
+          "canFinanceRegistrationTax": false
+        }
+      },
+      "poor": {
+        "creditRatingMin": 30,
+        "minCompanyYears": 1,
+        "requiresFinancialDisclosure": false,
+        "maxAdminBankruptcies": 3,
+        "bankruptcyScopeYears": 3,
+        "minAdminTrackRecordYears": 0.5,
+        "fraudScoreMax": 70,
+        "allowedLegalForms": ["BV", "NV", "CV", "VOF", "CommV", "VZW", "Eenmanszaak"],
+        "allowsSecondHand": true,
+        "minVehicleValue": 20000,
+        "maxSecondHandMileage": 50000,
+        "maxSecondHandAge": 3,
+        "maxVehicleHorsepower": 150,
+        "minDriverAge": 25,
+        "driversLicenseMin5Years": true,
+        "maxAccidentsAtFault": 3,
+        "maxAccidentsNotAtFault": 5,
+        "accidentScopeYears": 2,
+        "inhoudingsplichtAllowed": true,
+        "sanctionListAllowed": "manualReview",
+        "adverseMediaAllowed": true,
+        "financialConsequences": {
+          "yearlyInterestPercent": 22,
+          "minDownpaymentPercent": 20,
+          "maxFinancingPeriodMonths": 60,
+          "maxResidualValuePercent": 5,
+          "canFinanceRegistrationTax": false
+        }
+      }
+    },
+    "hardRejectionCriteria": {
+      "belgiumResidency": "Required for all tiers",
+      "minimumAge": 18,
+      "isAdministrator": "Required for all tiers",
+      "companyActive": "Required for all tiers",
+      "blocklistHit": "No for all tiers (hard rejection)",
+      "creditRatingMinimum": 30
+    },
+    "dataSources": {
+      "questionnaire": [
+        "belgiumResident",
+        "age",
+        "isAdministrator",
+        "contactWithLegalAuthorities",
+        "troubleWithPayment",
+        "blacklistedBanks",
+        "adminTrackRecordYears",
+        "driversLicenseSinceYears",
+        "accidentsAtFault",
+        "accidentsNotAtFault",
+        "accidentScopeYears",
+        "vehicle (all fields)"
+      ],
+      "creditsafe": [
+        "creditRating",
+        "companyYears (from incorporationDate)",
+        "financialStatements",
+        "companyStatus",
+        "adminBankruptcies",
+        "fraudScore",
+        "sanctionListHit",
+        "sanctionListJustbanBE",
+        "legalForm",
+        "blocklistHit"
+      ],
+      "vies": ["vatValid"],
+      "inhoudingsplicht": ["inhoudingsplichtHit"],
+      "stockSystemDealer": [
+        "vehicleHorsepower",
+        "vehicleValue",
+        "vehicleMileage",
+        "vehicleAge",
+        "vehicleType (new/secondHand)"
+      ]
+    }
+  }
