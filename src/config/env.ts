@@ -5,6 +5,15 @@ const env = {
   CORS_ORIGIN: process.env.CORS_ORIGIN,
   isProduction: process.env.NODE_ENV === "production",
   isDevelopment: process.env.NODE_ENV !== "production",
+
+  // Creditsafe API
+  creditsafe: {
+    username: process.env.CREDITSAFE_USERNAME ?? "",
+    password: process.env.CREDITSAFE_PASSWORD ?? "",
+    baseUrl:
+      process.env.CREDITSAFE_BASE_URL ??
+      "https://connect.sandbox.creditsafe.com/v1",
+  },
 } as const;
 
 function validateEnv() {
