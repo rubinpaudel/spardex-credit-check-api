@@ -5,6 +5,8 @@ import { tierThresholds } from "../../config/tier-config";
 /**
  * Rule: Credit rating determines tier.
  *
+ * Uses real Creditsafe data. Falls back to MANUAL_REVIEW if unavailable.
+ *
  * Thresholds:
  * - >= 90 → EXCELLENT
  * - >= 70 → GOOD
@@ -17,8 +19,20 @@ export const creditRatingRule: Rule = {
   category: "company",
 
   evaluate(context: RuleContext): RuleResult {
-    // Get credit rating from mock data (later: from Creditsafe)
-    const creditRating = context.questionnaire._mock?.creditRating ?? 100;
+    // Check if Creditsafe data is available
+    if (!context.creditsafe) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.MANUAL_REVIEW,
+        passed: false,
+        reason: "Credit rating unavailable - Creditsafe data not available",
+        actualValue: null,
+        expectedValue: "Credit rating required",
+      };
+    }
+
+    const creditRating = context.creditsafe.creditRating;
 
     // Check each tier from best to worst
     const tiers = [Tier.EXCELLENT, Tier.GOOD, Tier.FAIR, Tier.POOR] as const;
@@ -32,7 +46,11 @@ export const creditRatingRule: Rule = {
           tier,
           passed: true,
           reason: `Credit rating ${creditRating} meets ${tier} threshold (>= ${threshold})`,
-          actualValue: creditRating,
+          actualValue: {
+            creditRating,
+            grade: context.creditsafe.creditRatingGrade,
+            description: context.creditsafe.creditRatingDescription,
+          },
           expectedValue: {
             excellent: tierThresholds[Tier.EXCELLENT].creditRatingMin,
             good: tierThresholds[Tier.GOOD].creditRatingMin,
@@ -50,7 +68,11 @@ export const creditRatingRule: Rule = {
       tier: Tier.REJECTED,
       passed: false,
       reason: `Credit rating ${creditRating} is below minimum threshold of ${tierThresholds[Tier.POOR].creditRatingMin}`,
-      actualValue: creditRating,
+      actualValue: {
+        creditRating,
+        grade: context.creditsafe.creditRatingGrade,
+        description: context.creditsafe.creditRatingDescription,
+      },
       expectedValue: `>= ${tierThresholds[Tier.POOR].creditRatingMin}`,
     };
   },
@@ -58,6 +80,8 @@ export const creditRatingRule: Rule = {
 
 /**
  * Rule: Company age determines tier.
+ *
+ * Uses real Creditsafe data (companyAgeYears). Falls back to MANUAL_REVIEW if unavailable.
  *
  * Thresholds:
  * - >= 5 years → EXCELLENT
@@ -71,8 +95,19 @@ export const companyAgeRule: Rule = {
   category: "company",
 
   evaluate(context: RuleContext): RuleResult {
-    // Get company age from mock data (later: calculated from Creditsafe incorporationDate)
-    const companyAgeYears = context.questionnaire._mock?.companyAgeYears ?? 10;
+    if (!context.creditsafe) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.MANUAL_REVIEW,
+        passed: false,
+        reason: "Company age unavailable - Creditsafe data not available",
+        actualValue: null,
+        expectedValue: "Company age required",
+      };
+    }
+
+    const companyAgeYears = context.creditsafe.companyAgeYears;
 
     const tiers = [Tier.EXCELLENT, Tier.GOOD, Tier.FAIR, Tier.POOR] as const;
 
@@ -84,8 +119,11 @@ export const companyAgeRule: Rule = {
           category: this.category,
           tier,
           passed: true,
-          reason: `Company is ${companyAgeYears} years old, meets ${tier} threshold (>= ${threshold})`,
-          actualValue: companyAgeYears,
+          reason: `Company is ${companyAgeYears.toFixed(1)} years old, meets ${tier} threshold (>= ${threshold})`,
+          actualValue: {
+            years: companyAgeYears,
+            incorporationDate: context.creditsafe.incorporationDate,
+          },
           expectedValue: {
             excellent: tierThresholds[Tier.EXCELLENT].minCompanyYears,
             good: tierThresholds[Tier.GOOD].minCompanyYears,
@@ -101,8 +139,11 @@ export const companyAgeRule: Rule = {
       category: this.category,
       tier: Tier.REJECTED,
       passed: false,
-      reason: `Company is ${companyAgeYears} years old, below minimum of ${tierThresholds[Tier.POOR].minCompanyYears} year`,
-      actualValue: companyAgeYears,
+      reason: `Company is ${companyAgeYears.toFixed(1)} years old, below minimum of ${tierThresholds[Tier.POOR].minCompanyYears} year`,
+      actualValue: {
+        years: companyAgeYears,
+        incorporationDate: context.creditsafe.incorporationDate,
+      },
       expectedValue: `>= ${tierThresholds[Tier.POOR].minCompanyYears}`,
     };
   },
@@ -223,6 +264,55 @@ export const vatValidRule: Rule = {
       reason: "VAT number is invalid. Requires manual review.",
       actualValue: { valid: false },
       expectedValue: "Valid VAT number",
+    };
+  },
+};
+
+/**
+ * Rule: Company must be active.
+ *
+ * Uses Creditsafe isActive field.
+ *
+ * - Active → EXCELLENT (doesn't restrict)
+ * - Inactive → REJECTED
+ */
+export const companyActiveRule: Rule = {
+  id: "company-active",
+  category: "company",
+
+  evaluate(context: RuleContext): RuleResult {
+    if (!context.creditsafe) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.MANUAL_REVIEW,
+        passed: false,
+        reason: "Company status unavailable",
+        actualValue: null,
+        expectedValue: "Active company status",
+      };
+    }
+
+    if (!context.creditsafe.isActive) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.REJECTED,
+        passed: false,
+        reason: `Company is not active (status: ${context.creditsafe.companyStatus})`,
+        actualValue: context.creditsafe.companyStatus,
+        expectedValue: "Active",
+      };
+    }
+
+    return {
+      ruleId: this.id,
+      category: this.category,
+      tier: Tier.EXCELLENT,
+      passed: true,
+      reason: "Company is active",
+      actualValue: context.creditsafe.companyStatus,
+      expectedValue: "Active",
     };
   },
 };

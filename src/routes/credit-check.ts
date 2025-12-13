@@ -2,11 +2,10 @@ import { Elysia, t } from "elysia";
 import { creditCheckSchema } from "../validation/credit-check.validation";
 import { CreditCheckResponse } from "../types/response";
 import { Tier, tierToString } from "../types/tiers";
-import { RuleContext, ViesData } from "../types/rules";
 import { getFinancialTerms } from "../config";
 import { stringToTier } from "../utils";
 import { allRules, evaluateAllRules, aggregateResults } from "../rules";
-import { validateVatNumber } from "../services/vies/client";
+import { enrichData, buildRuleContext } from "../services/data-enrichment";
 
 export const creditCheckRoutes = new Elysia({ prefix: "/api/v1" }).post(
   "/credit-check",
@@ -29,24 +28,11 @@ export const creditCheckRoutes = new Elysia({ prefix: "/api/v1" }).post(
       };
     }
 
-    // Call VIES API to validate VAT number
-    const viesResult = await validateVatNumber(body.company.vatNumber);
+    // Enrich data from external APIs (Creditsafe + VIES in parallel)
+    const enrichment = await enrichData(body.company.vatNumber);
 
-    // Build VIES data for context
-    const viesData: ViesData = {
-      valid: viesResult.valid,
-      companyName: viesResult.companyName,
-      companyAddress: viesResult.companyAddress,
-      error: viesResult.error,
-      apiCallFailed: !!viesResult.error && !viesResult.valid,
-    };
-
-    // Create rule context from request
-    const context: RuleContext = {
-      questionnaire: body.questionnaire,
-      company: body.company,
-      vies: viesData,
-    };
+    // Build rule context
+    const context = buildRuleContext(body, enrichment);
 
     // Run all rules
     const ruleResults = evaluateAllRules(allRules, context);
@@ -67,6 +53,11 @@ export const creditCheckRoutes = new Elysia({ prefix: "/api/v1" }).post(
           ...r,
           tier: tierToString(r.tier),
         })),
+      },
+      enrichedData: {
+        creditsafe: enrichment.creditsafe,
+        vies: enrichment.vies,
+        errors: enrichment.errors,
       },
       requestId: crypto.randomUUID(),
       timestamp: new Date().toISOString(),

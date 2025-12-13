@@ -1,55 +1,77 @@
 import { Rule, RuleResult, RuleContext } from "../../types/rules";
 import { Tier } from "../../types/tiers";
 import { tierThresholds } from "../../config/tier-config";
+import { countBankruptciesInScope } from "../../services/creditsafe/mapper";
 
 /**
  * Rule: Administrator bankruptcy count determines tier.
  *
- * Note: This counts bankruptcies within the scope period, which varies by tier:
+ * Uses real Creditsafe data with scope filtering by tier:
  * - EXCELLENT: last 10 years, max 0
  * - GOOD: last 7 years, max 1
  * - FAIR: last 5 years, max 2
  * - POOR: last 3 years, max 3
- *
- * For now using simple count. Later: filter by date from Creditsafe data.
  */
 export const adminBankruptciesRule: Rule = {
   id: "admin-bankruptcies",
   category: "admin",
 
   evaluate(context: RuleContext): RuleResult {
-    // Get bankruptcy count from mock data (later: from Creditsafe)
-    const bankruptcyCount = context.questionnaire._mock?.adminBankruptcies ?? 0;
+    if (!context.creditsafe) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.MANUAL_REVIEW,
+        passed: false,
+        reason: "Bankruptcy information unavailable",
+        actualValue: null,
+        expectedValue: "Bankruptcy check required",
+      };
+    }
 
+    const bankruptcies = context.creditsafe.bankruptcies;
     const tiers = [Tier.EXCELLENT, Tier.GOOD, Tier.FAIR, Tier.POOR] as const;
 
     for (const tier of tiers) {
       const maxAllowed = tierThresholds[tier].maxAdminBankruptcies;
-      if (bankruptcyCount <= maxAllowed) {
+      const scopeYears = tierThresholds[tier].bankruptcyScopeYears;
+      const bankruptciesInScope = countBankruptciesInScope(
+        bankruptcies,
+        scopeYears
+      );
+
+      if (bankruptciesInScope <= maxAllowed) {
         return {
           ruleId: this.id,
           category: this.category,
           tier,
           passed: true,
-          reason: `Administrator has ${bankruptcyCount} bankruptcies, within ${tier} limit (<= ${maxAllowed})`,
-          actualValue: bankruptcyCount,
+          reason: `${bankruptciesInScope} bankruptcies in last ${scopeYears} years, within ${tier} limit (<= ${maxAllowed})`,
+          actualValue: {
+            count: bankruptciesInScope,
+            scopeYears,
+            bankruptcies: bankruptcies.filter((b) => b.yearsAgo <= scopeYears),
+          },
           expectedValue: {
-            excellent: `<= ${tierThresholds[Tier.EXCELLENT].maxAdminBankruptcies}`,
-            good: `<= ${tierThresholds[Tier.GOOD].maxAdminBankruptcies}`,
-            fair: `<= ${tierThresholds[Tier.FAIR].maxAdminBankruptcies}`,
-            poor: `<= ${tierThresholds[Tier.POOR].maxAdminBankruptcies}`,
+            excellent: `<= ${tierThresholds[Tier.EXCELLENT].maxAdminBankruptcies} in ${tierThresholds[Tier.EXCELLENT].bankruptcyScopeYears}yr`,
+            good: `<= ${tierThresholds[Tier.GOOD].maxAdminBankruptcies} in ${tierThresholds[Tier.GOOD].bankruptcyScopeYears}yr`,
+            fair: `<= ${tierThresholds[Tier.FAIR].maxAdminBankruptcies} in ${tierThresholds[Tier.FAIR].bankruptcyScopeYears}yr`,
+            poor: `<= ${tierThresholds[Tier.POOR].maxAdminBankruptcies} in ${tierThresholds[Tier.POOR].bankruptcyScopeYears}yr`,
           },
         };
       }
     }
+
+    const poorScope = tierThresholds[Tier.POOR].bankruptcyScopeYears;
+    const countInPoorScope = countBankruptciesInScope(bankruptcies, poorScope);
 
     return {
       ruleId: this.id,
       category: this.category,
       tier: Tier.REJECTED,
       passed: false,
-      reason: `Administrator has ${bankruptcyCount} bankruptcies, exceeds maximum of ${tierThresholds[Tier.POOR].maxAdminBankruptcies}`,
-      actualValue: bankruptcyCount,
+      reason: `${countInPoorScope} bankruptcies in last ${poorScope} years exceeds maximum of ${tierThresholds[Tier.POOR].maxAdminBankruptcies}`,
+      actualValue: countInPoorScope,
       expectedValue: `<= ${tierThresholds[Tier.POOR].maxAdminBankruptcies}`,
     };
   },

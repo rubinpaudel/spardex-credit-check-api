@@ -5,6 +5,8 @@ import { tierThresholds } from "../../config/tier-config";
 /**
  * Rule: Fraud score determines tier.
  *
+ * Uses real Creditsafe fraud score. If unavailable, no penalty applied.
+ *
  * Note: LOWER is better for fraud score (opposite of credit rating)
  *
  * Thresholds (maximum allowed):
@@ -19,8 +21,20 @@ export const fraudScoreRule: Rule = {
   category: "fraud",
 
   evaluate(context: RuleContext): RuleResult {
-    // Get fraud score from mock data (later: from Creditsafe)
-    const fraudScore = context.questionnaire._mock?.fraudScore ?? 0;
+    // If no Creditsafe data or no fraud score, don't penalize
+    if (!context.creditsafe || context.creditsafe.fraudScore === null) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.EXCELLENT,
+        passed: true,
+        reason: "Fraud score not available - no penalty applied",
+        actualValue: null,
+        expectedValue: "Fraud score check optional",
+      };
+    }
+
+    const fraudScore = context.creditsafe.fraudScore;
 
     const tiers = [Tier.EXCELLENT, Tier.GOOD, Tier.FAIR, Tier.POOR] as const;
 
@@ -33,7 +47,10 @@ export const fraudScoreRule: Rule = {
           tier,
           passed: true,
           reason: `Fraud score ${fraudScore} is within ${tier} limit (<= ${maxAllowed})`,
-          actualValue: fraudScore,
+          actualValue: {
+            score: fraudScore,
+            description: context.creditsafe.fraudDescription,
+          },
           expectedValue: {
             excellent: `<= ${tierThresholds[Tier.EXCELLENT].fraudScoreMax}`,
             good: `<= ${tierThresholds[Tier.GOOD].fraudScoreMax}`,
@@ -50,7 +67,10 @@ export const fraudScoreRule: Rule = {
       tier: Tier.REJECTED,
       passed: false,
       reason: `Fraud score ${fraudScore} exceeds maximum of ${tierThresholds[Tier.POOR].fraudScoreMax}`,
-      actualValue: fraudScore,
+      actualValue: {
+        score: fraudScore,
+        description: context.creditsafe.fraudDescription,
+      },
       expectedValue: `<= ${tierThresholds[Tier.POOR].fraudScoreMax}`,
     };
   },

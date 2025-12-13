@@ -1,4 +1,6 @@
 import { TierName } from "./tiers";
+import { CreditsafeData } from "../services/creditsafe/mapper";
+import { ViesResult } from "../services/vies/types";
 
 // Financial terms that apply to a tier
 export interface FinancialTerms {
@@ -20,6 +22,13 @@ export interface RuleResult {
   expectedValue: unknown; // What was required
 }
 
+// Enriched data from external APIs
+export interface EnrichedData {
+  creditsafe: CreditsafeData | null;
+  vies: ViesResult | null;
+  errors: string[];
+}
+
 // The complete API response
 export interface CreditCheckResponse {
   success: boolean;
@@ -29,6 +38,7 @@ export interface CreditCheckResponse {
     financialTerms: FinancialTerms;
     ruleResults: RuleResult[];
   };
+  enrichedData?: EnrichedData; // Data from external APIs
   requestId: string; // UUID for tracking
   timestamp: string; // ISO datetime
 }

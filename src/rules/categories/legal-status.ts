@@ -5,6 +5,8 @@ import { tierThresholds } from "../../config/tier-config";
 /**
  * Rule: Company legal form must be allowed for the tier.
  *
+ * Uses Creditsafe normalized legal form if available.
+ *
  * Allowed forms:
  * - EXCELLENT/GOOD: BV, NV, VOF, CommV
  * - FAIR: BV, VOF, CommV (no NV)
@@ -17,7 +19,9 @@ export const legalFormRule: Rule = {
   category: "legal_status",
 
   evaluate(context: RuleContext): RuleResult {
-    const legalForm = context.company.legalForm;
+    // Use Creditsafe legal form if available (normalized), otherwise use company.legalForm
+    const legalForm =
+      context.creditsafe?.legalForm ?? context.company.legalForm;
 
     // Check tiers from best to worst
     const tiers = [Tier.EXCELLENT, Tier.GOOD, Tier.FAIR, Tier.POOR] as const;

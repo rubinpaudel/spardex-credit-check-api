@@ -1,6 +1,7 @@
 import { Tier } from "./tiers";
 import { QuestionnaireData, CompanyInfo } from "./request";
 import { TierThresholds } from "../config/tier-config";
+import { CreditsafeData } from "../services/creditsafe/mapper";
 
 // Categories of rules
 export type RuleCategory =
@@ -33,12 +34,18 @@ export interface ViesData {
   apiCallFailed: boolean;
 }
 
-// Context passed to rules (will grow as we add data sources)
+// Context passed to rules
 export interface RuleContext {
   questionnaire: QuestionnaireData;
   company: CompanyInfo;
+
+  // External data sources
+  creditsafe: CreditsafeData | null;
   vies?: ViesData;
-  // Later: creditsafe, calculated fields
+
+  // Flags for API failures
+  creditsafeFailed: boolean;
+  viesFailed: boolean;
 }
 
 // A rule that can be evaluated
