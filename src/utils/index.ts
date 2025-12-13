@@ -1,1 +1,1 @@
-export { isWorseTier, getWorseTier } from "./tier";
+export { isWorseTier, getWorseTier, stringToTier } from "./tier";
