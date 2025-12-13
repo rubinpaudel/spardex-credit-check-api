@@ -107,3 +107,56 @@ export const companyAgeRule: Rule = {
     };
   },
 };
+
+/**
+ * Rule: Withholding obligation (debt to RSZ/FOD Financiën).
+ *
+ * This is self-declared in the questionnaire since we don't have API access.
+ *
+ * - No debt → EXCELLENT (doesn't restrict)
+ * - Has debt → POOR (only tier that allows it)
+ */
+export const withholdingObligationRule: Rule = {
+  id: "withholding-obligation",
+  category: "company",
+
+  evaluate(context: RuleContext): RuleResult {
+    const hasDebt = context.questionnaire.withholdingObligation.selfDeclaredDebt;
+
+    if (!hasDebt) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.EXCELLENT,
+        passed: true,
+        reason: "No self-declared debt to RSZ/FOD Financiën",
+        actualValue: hasDebt,
+        expectedValue: false,
+      };
+    }
+
+    // Has debt - only Poor tier allows this
+    if (tierThresholds[Tier.POOR].witholdingObligationAllowed) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.POOR,
+        passed: true,
+        reason:
+          "Self-declared debt to RSZ/FOD Financiën - only POOR tier allows this",
+        actualValue: hasDebt,
+        expectedValue: "Only allowed for POOR tier",
+      };
+    }
+
+    return {
+      ruleId: this.id,
+      category: this.category,
+      tier: Tier.REJECTED,
+      passed: false,
+      reason: "Debt to RSZ/FOD Financiën not allowed",
+      actualValue: hasDebt,
+      expectedValue: false,
+    };
+  },
+};

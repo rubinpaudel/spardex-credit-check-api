@@ -21,6 +21,8 @@ export interface LegalHistory {
 
 // Driving/accident history
 export interface InsuranceHistory {
+  driverAge: number; // Age of primary driver
+  licenseYears: number; // Years holding driver's license
   accidentsAtFault: number; // Count in scope period
   accidentsNotAtFault: number;
   accidentScopeYears: number; // How many years back we're looking

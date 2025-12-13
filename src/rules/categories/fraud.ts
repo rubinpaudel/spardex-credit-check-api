@@ -55,3 +55,53 @@ export const fraudScoreRule: Rule = {
     };
   },
 };
+
+/**
+ * Rule: Sanction list hit.
+ *
+ * - No hit → EXCELLENT (doesn't restrict)
+ * - Hit → MANUAL_REVIEW (Poor tier allows with manual review)
+ */
+export const sanctionListRule: Rule = {
+  id: "sanction-list",
+  category: "fraud",
+
+  evaluate(context: RuleContext): RuleResult {
+    const hasHit = context.questionnaire._mock?.sanctionListHit ?? false;
+
+    if (!hasHit) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.EXCELLENT,
+        passed: true,
+        reason: "No sanction list hit",
+        actualValue: hasHit,
+        expectedValue: false,
+      };
+    }
+
+    // Has hit - check if any tier allows with manual review
+    if (tierThresholds[Tier.POOR].sanctionListAllowed === "manualReview") {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.MANUAL_REVIEW,
+        passed: true,
+        reason: "Sanction list hit detected - requires manual review",
+        actualValue: hasHit,
+        expectedValue: "No hit, or manual review if hit",
+      };
+    }
+
+    return {
+      ruleId: this.id,
+      category: this.category,
+      tier: Tier.REJECTED,
+      passed: false,
+      reason: "Sanction list hit - not allowed",
+      actualValue: hasHit,
+      expectedValue: false,
+    };
+  },
+};

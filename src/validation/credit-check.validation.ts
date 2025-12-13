@@ -25,6 +25,8 @@ export const creditCheckSchema = t.Object({
       blacklistedBanks: t.Array(t.String()),
     }),
     insuranceHistory: t.Object({
+      driverAge: t.Number({ minimum: 0 }),
+      licenseYears: t.Number({ minimum: 0 }),
       accidentsAtFault: t.Number({ minimum: 0 }),
       accidentsNotAtFault: t.Number({ minimum: 0 }),
       accidentScopeYears: t.Number({ minimum: 0 }),
