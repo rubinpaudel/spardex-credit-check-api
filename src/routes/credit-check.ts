@@ -2,10 +2,11 @@ import { Elysia, t } from "elysia";
 import { creditCheckSchema } from "../validation/credit-check.validation";
 import { CreditCheckResponse } from "../types/response";
 import { Tier, tierToString } from "../types/tiers";
-import { RuleContext } from "../types/rules";
+import { RuleContext, ViesData } from "../types/rules";
 import { getFinancialTerms } from "../config";
 import { stringToTier } from "../utils";
 import { allRules, evaluateAllRules, aggregateResults } from "../rules";
+import { validateVatNumber } from "../services/vies/client";
 
 export const creditCheckRoutes = new Elysia({ prefix: "/api/v1" }).post(
   "/credit-check",
@@ -28,10 +29,23 @@ export const creditCheckRoutes = new Elysia({ prefix: "/api/v1" }).post(
       };
     }
 
+    // Call VIES API to validate VAT number
+    const viesResult = await validateVatNumber(body.company.vatNumber);
+
+    // Build VIES data for context
+    const viesData: ViesData = {
+      valid: viesResult.valid,
+      companyName: viesResult.companyName,
+      companyAddress: viesResult.companyAddress,
+      error: viesResult.error,
+      apiCallFailed: !!viesResult.error && !viesResult.valid,
+    };
+
     // Create rule context from request
     const context: RuleContext = {
       questionnaire: body.questionnaire,
       company: body.company,
+      vies: viesData,
     };
 
     // Run all rules

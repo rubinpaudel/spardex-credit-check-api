@@ -24,11 +24,21 @@ export interface RuleResult {
   expectedValue: unknown;
 }
 
+// VIES validation data
+export interface ViesData {
+  valid: boolean;
+  companyName?: string;
+  companyAddress?: string;
+  error?: string;
+  apiCallFailed: boolean;
+}
+
 // Context passed to rules (will grow as we add data sources)
 export interface RuleContext {
   questionnaire: QuestionnaireData;
   company: CompanyInfo;
-  // Later: creditsafe, vies, calculated fields
+  vies?: ViesData;
+  // Later: creditsafe, calculated fields
 }
 
 // A rule that can be evaluated

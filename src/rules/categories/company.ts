@@ -160,3 +160,69 @@ export const withholdingObligationRule: Rule = {
     };
   },
 };
+
+/**
+ * Rule: VAT number must be valid.
+ *
+ * - Valid → EXCELLENT
+ * - Invalid → MANUAL_REVIEW
+ * - API failed → MANUAL_REVIEW (don't reject due to API issues)
+ */
+export const vatValidRule: Rule = {
+  id: "vat-valid",
+  category: "company",
+
+  evaluate(context: RuleContext): RuleResult {
+    const vies = context.vies;
+
+    // If no VIES data, API wasn't called (shouldn't happen)
+    if (!vies) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.MANUAL_REVIEW,
+        passed: false,
+        reason: "VAT validation not performed",
+        actualValue: null,
+        expectedValue: "Valid VAT number",
+      };
+    }
+
+    // If API call failed, don't reject - manual review
+    if (vies.apiCallFailed) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.MANUAL_REVIEW,
+        passed: false,
+        reason: `VAT validation failed: ${vies.error}. Requires manual review.`,
+        actualValue: vies.error,
+        expectedValue: "Valid VAT number",
+      };
+    }
+
+    // VAT is valid
+    if (vies.valid) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.EXCELLENT,
+        passed: true,
+        reason: `VAT number valid. Company: ${vies.companyName}`,
+        actualValue: { valid: true, name: vies.companyName },
+        expectedValue: "Valid VAT number",
+      };
+    }
+
+    // VAT is invalid - manual review
+    return {
+      ruleId: this.id,
+      category: this.category,
+      tier: Tier.MANUAL_REVIEW,
+      passed: false,
+      reason: "VAT number is invalid. Requires manual review.",
+      actualValue: { valid: false },
+      expectedValue: "Valid VAT number",
+    };
+  },
+};

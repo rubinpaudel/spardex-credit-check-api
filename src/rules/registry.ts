@@ -8,6 +8,7 @@ import {
   creditRatingRule,
   companyAgeRule,
   withholdingObligationRule,
+  vatValidRule,
 } from "./categories/company";
 import { adminBankruptciesRule } from "./categories/admin";
 import { fraudScoreRule, sanctionListRule } from "./categories/fraud";
@@ -36,6 +37,7 @@ export const allRules: Rule[] = [
   belgiumResidencyRule,
   isAdministratorRule,
   // Company rules
+  vatValidRule,
   creditRatingRule,
   companyAgeRule,
   withholdingObligationRule,
