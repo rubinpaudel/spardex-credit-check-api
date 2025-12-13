@@ -1,0 +1,591 @@
+{
+  "testUsers": [
+    {
+      "id": "TEST_USER_001",
+      "description": "Perfect BV company with excellent credit",
+      "expectedTier": "excellent",
+      "company": {
+        "vatNumber": "BE0123456789",
+        "name": "Perfect BV Company",
+        "legalForm": "BV"
+      },
+      "questionnaire": {
+        "contact": {
+          "firstName": "Jan",
+          "lastName": "De Groot",
+          "email": "jan@perfectbv.be",
+          "phone": "+32 123 456 789",
+          "dateOfBirth": "1980-01-15",
+          "nationality": "BE",
+          "belgiumResident": true,
+          "isAdministrator": true,
+          "driversLicenseSinceYears": 20,
+          "adminTrackRecordYearsBelgium": 10
+        },
+        "legalHistory": {
+          "contactWithLegalAuthorities": false,
+          "troubleWithPaymentAtFinancingCompany": false,
+          "blacklistedBanks": []
+        },
+        "insuranceHistory": {
+          "driverAge": 44,
+          "licenseYears": 20,
+          "accidentsAtFault": 0,
+          "accidentsNotAtFault": 0,
+          "accidentScopeYears": 2
+        },
+        "vehicle": {
+          "type": "new",
+          "horsepower": 120,
+          "value": 35000,
+          "mileage": 0,
+          "ageYears": 0
+        },
+        "withholdingObligation": {
+          "selfDeclaredDebt": false
+        }
+      },
+      "mockCreditsafeResponse": {
+        "creditRating": 95,
+        "creditRatingGrade": "A",
+        "creditRatingDescription": "Very Low Risk",
+        "companyAgeYears": 10,
+        "legalForm": "BV",
+        "isActive": true,
+        "companyStatus": "Active",
+        "bankruptcies": [],
+        "fraudScore": null
+      }
+    },
+    {
+      "id": "TEST_USER_002",
+      "description": "NV company with excellent credit, 27yr old",
+      "expectedTier": "excellent",
+      "company": {
+        "vatNumber": "BE9876543210",
+        "name": "Established NV Corp",
+        "legalForm": "NV"
+      },
+      "questionnaire": {
+        "contact": {
+          "firstName": "Marie",
+          "lastName": "Janssens",
+          "email": "marie@established-nv.be",
+          "phone": "+32 987 654 321",
+          "dateOfBirth": "1975-06-20",
+          "nationality": "BE",
+          "belgiumResident": true,
+          "isAdministrator": true,
+          "driversLicenseSinceYears": 25,
+          "adminTrackRecordYearsBelgium": 15
+        },
+        "legalHistory": {
+          "contactWithLegalAuthorities": false,
+          "troubleWithPaymentAtFinancingCompany": false,
+          "blacklistedBanks": []
+        },
+        "insuranceHistory": {
+          "driverAge": 49,
+          "licenseYears": 25,
+          "accidentsAtFault": 0,
+          "accidentsNotAtFault": 1,
+          "accidentScopeYears": 2
+        },
+        "vehicle": {
+          "type": "new",
+          "horsepower": 150,
+          "value": 50000,
+          "mileage": 0,
+          "ageYears": 0
+        },
+        "withholdingObligation": {
+          "selfDeclaredDebt": false
+        }
+      },
+      "mockCreditsafeResponse": {
+        "creditRating": 92,
+        "creditRatingGrade": "A",
+        "creditRatingDescription": "Very Low Risk",
+        "companyAgeYears": 27,
+        "legalForm": "NV",
+        "isActive": true,
+        "companyStatus": "Active",
+        "bankruptcies": [],
+        "fraudScore": 15
+      }
+    },
+    {
+      "id": "TEST_USER_003",
+      "description": "Good tier - credit 78, 1 bankruptcy 5yrs ago",
+      "expectedTier": "good",
+      "company": {
+        "vatNumber": "BE1111111111",
+        "name": "Good BV Company",
+        "legalForm": "BV"
+      },
+      "questionnaire": {
+        "contact": {
+          "firstName": "Pieter",
+          "lastName": "Van Berg",
+          "email": "pieter@goodbv.be",
+          "phone": "+32 111 111 111",
+          "dateOfBirth": "1985-03-10",
+          "nationality": "BE",
+          "belgiumResident": true,
+          "isAdministrator": true,
+          "driversLicenseSinceYears": 15,
+          "adminTrackRecordYearsBelgium": 8
+        },
+        "legalHistory": {
+          "contactWithLegalAuthorities": false,
+          "troubleWithPaymentAtFinancingCompany": false,
+          "blacklistedBanks": []
+        },
+        "insuranceHistory": {
+          "driverAge": 39,
+          "licenseYears": 15,
+          "accidentsAtFault": 0,
+          "accidentsNotAtFault": 0,
+          "accidentScopeYears": 2
+        },
+        "vehicle": {
+          "type": "new",
+          "horsepower": 100,
+          "value": 25000,
+          "mileage": 0,
+          "ageYears": 0
+        },
+        "withholdingObligation": {
+          "selfDeclaredDebt": false
+        }
+      },
+      "mockCreditsafeResponse": {
+        "creditRating": 78,
+        "creditRatingGrade": "B",
+        "creditRatingDescription": "Low Risk",
+        "companyAgeYears": 5,
+        "legalForm": "BV",
+        "isActive": true,
+        "companyStatus": "Active",
+        "bankruptcies": [
+          { "type": "bankruptcy", "date": "2019-06-01", "status": "closed", "yearsAgo": 5.5 }
+        ],
+        "fraudScore": 35
+      }
+    },
+    {
+      "id": "TEST_USER_004",
+      "description": "Good tier - VOF with second-hand vehicle within limits",
+      "expectedTier": "good",
+      "company": {
+        "vatNumber": "BE2222222222",
+        "name": "VOF Partners",
+        "legalForm": "VOF"
+      },
+      "questionnaire": {
+        "contact": {
+          "firstName": "Koen",
+          "lastName": "De Smet",
+          "email": "koen@vofpartners.be",
+          "phone": "+32 222 222 222",
+          "dateOfBirth": "1978-08-25",
+          "nationality": "BE",
+          "belgiumResident": true,
+          "isAdministrator": true,
+          "driversLicenseSinceYears": 20,
+          "adminTrackRecordYearsBelgium": 10
+        },
+        "legalHistory": {
+          "contactWithLegalAuthorities": false,
+          "troubleWithPaymentAtFinancingCompany": false,
+          "blacklistedBanks": []
+        },
+        "insuranceHistory": {
+          "driverAge": 46,
+          "licenseYears": 20,
+          "accidentsAtFault": 0,
+          "accidentsNotAtFault": 0,
+          "accidentScopeYears": 2
+        },
+        "vehicle": {
+          "type": "secondHand",
+          "horsepower": 110,
+          "value": 28000,
+          "mileage": 5000,
+          "ageYears": 0.4
+        },
+        "withholdingObligation": {
+          "selfDeclaredDebt": false
+        }
+      },
+      "mockCreditsafeResponse": {
+        "creditRating": 75,
+        "creditRatingGrade": "B",
+        "creditRatingDescription": "Low Risk",
+        "companyAgeYears": 6,
+        "legalForm": "VOF",
+        "isActive": true,
+        "companyStatus": "Active",
+        "bankruptcies": [],
+        "fraudScore": 25
+      }
+    },
+    {
+      "id": "TEST_USER_005",
+      "description": "Fair tier - credit 55, 2 bankruptcies in 5 years",
+      "expectedTier": "fair",
+      "company": {
+        "vatNumber": "BE3333333333",
+        "name": "Fair BV Company",
+        "legalForm": "BV"
+      },
+      "questionnaire": {
+        "contact": {
+          "firstName": "Lisa",
+          "lastName": "Peeters",
+          "email": "lisa@fairbv.be",
+          "phone": "+32 333 333 333",
+          "dateOfBirth": "1982-11-05",
+          "nationality": "BE",
+          "belgiumResident": true,
+          "isAdministrator": true,
+          "driversLicenseSinceYears": 18,
+          "adminTrackRecordYearsBelgium": 6
+        },
+        "legalHistory": {
+          "contactWithLegalAuthorities": false,
+          "troubleWithPaymentAtFinancingCompany": false,
+          "blacklistedBanks": []
+        },
+        "insuranceHistory": {
+          "driverAge": 42,
+          "licenseYears": 18,
+          "accidentsAtFault": 1,
+          "accidentsNotAtFault": 1,
+          "accidentScopeYears": 2
+        },
+        "vehicle": {
+          "type": "new",
+          "horsepower": 90,
+          "value": 22000,
+          "mileage": 0,
+          "ageYears": 0
+        },
+        "withholdingObligation": {
+          "selfDeclaredDebt": false
+        }
+      },
+      "mockCreditsafeResponse": {
+        "creditRating": 55,
+        "creditRatingGrade": "C",
+        "creditRatingDescription": "Moderate Risk",
+        "companyAgeYears": 3,
+        "legalForm": "BV",
+        "isActive": true,
+        "companyStatus": "Active",
+        "bankruptcies": [
+          { "type": "bankruptcy", "date": "2021-03-15", "status": "closed", "yearsAgo": 3.7 },
+          { "type": "bankruptcy", "date": "2022-09-01", "status": "closed", "yearsAgo": 2.3 }
+        ],
+        "fraudScore": 45
+      }
+    },
+    {
+      "id": "TEST_USER_006",
+      "description": "Fair tier - CommV with higher fraud score",
+      "expectedTier": "fair",
+      "company": {
+        "vatNumber": "BE4444444444",
+        "name": "CommV Enterprise",
+        "legalForm": "CommV"
+      },
+      "questionnaire": {
+        "contact": {
+          "firstName": "Thomas",
+          "lastName": "Maes",
+          "email": "thomas@commventerprise.be",
+          "phone": "+32 444 444 444",
+          "dateOfBirth": "1979-04-18",
+          "nationality": "BE",
+          "belgiumResident": true,
+          "isAdministrator": true,
+          "driversLicenseSinceYears": 22,
+          "adminTrackRecordYearsBelgium": 7
+        },
+        "legalHistory": {
+          "contactWithLegalAuthorities": false,
+          "troubleWithPaymentAtFinancingCompany": false,
+          "blacklistedBanks": []
+        },
+        "insuranceHistory": {
+          "driverAge": 45,
+          "licenseYears": 22,
+          "accidentsAtFault": 0,
+          "accidentsNotAtFault": 2,
+          "accidentScopeYears": 2
+        },
+        "vehicle": {
+          "type": "new",
+          "horsepower": 100,
+          "value": 30000,
+          "mileage": 0,
+          "ageYears": 0
+        },
+        "withholdingObligation": {
+          "selfDeclaredDebt": false
+        }
+      },
+      "mockCreditsafeResponse": {
+        "creditRating": 60,
+        "creditRatingGrade": "C",
+        "creditRatingDescription": "Moderate Risk",
+        "companyAgeYears": 4,
+        "legalForm": "CommV",
+        "isActive": true,
+        "companyStatus": "Active",
+        "bankruptcies": [],
+        "fraudScore": 55
+      }
+    },
+    {
+      "id": "TEST_USER_007",
+      "description": "Poor tier - Sole proprietorship with 3 bankruptcies",
+      "expectedTier": "poor",
+      "company": {
+        "vatNumber": "BE5555555555",
+        "name": "Eenmanszaak Business",
+        "legalForm": "Eenmanszaak"
+      },
+      "questionnaire": {
+        "contact": {
+          "firstName": "Hendrik",
+          "lastName": "Claes",
+          "email": "hendrik@eenmanszaak.be",
+          "phone": "+32 555 555 555",
+          "dateOfBirth": "1976-07-22",
+          "nationality": "BE",
+          "belgiumResident": true,
+          "isAdministrator": true,
+          "driversLicenseSinceYears": 25,
+          "adminTrackRecordYearsBelgium": 5
+        },
+        "legalHistory": {
+          "contactWithLegalAuthorities": false,
+          "troubleWithPaymentAtFinancingCompany": false,
+          "blacklistedBanks": []
+        },
+        "insuranceHistory": {
+          "driverAge": 48,
+          "licenseYears": 25,
+          "accidentsAtFault": 1,
+          "accidentsNotAtFault": 2,
+          "accidentScopeYears": 2
+        },
+        "vehicle": {
+          "type": "secondHand",
+          "horsepower": 100,
+          "value": 25000,
+          "mileage": 30000,
+          "ageYears": 2
+        },
+        "withholdingObligation": {
+          "selfDeclaredDebt": false
+        }
+      },
+      "mockCreditsafeResponse": {
+        "creditRating": 35,
+        "creditRatingGrade": "D",
+        "creditRatingDescription": "High Risk",
+        "companyAgeYears": 2,
+        "legalForm": "Eenmanszaak",
+        "isActive": true,
+        "companyStatus": "Active",
+        "bankruptcies": [
+          { "type": "bankruptcy", "date": "2022-01-15", "status": "closed", "yearsAgo": 2.9 },
+          { "type": "bankruptcy", "date": "2022-08-01", "status": "closed", "yearsAgo": 2.4 },
+          { "type": "bankruptcy", "date": "2023-03-01", "status": "closed", "yearsAgo": 1.8 }
+        ],
+        "fraudScore": 60
+      }
+    },
+    {
+      "id": "TEST_USER_008",
+      "description": "Poor tier - VZW with payment trouble history",
+      "expectedTier": "poor",
+      "company": {
+        "vatNumber": "BE6666666666",
+        "name": "VZW Association",
+        "legalForm": "VZW"
+      },
+      "questionnaire": {
+        "contact": {
+          "firstName": "Els",
+          "lastName": "Wouters",
+          "email": "els@vzwassociation.be",
+          "phone": "+32 666 666 666",
+          "dateOfBirth": "1983-02-14",
+          "nationality": "BE",
+          "belgiumResident": true,
+          "isAdministrator": true,
+          "driversLicenseSinceYears": 17,
+          "adminTrackRecordYearsBelgium": 4
+        },
+        "legalHistory": {
+          "contactWithLegalAuthorities": false,
+          "troubleWithPaymentAtFinancingCompany": true,
+          "blacklistedBanks": []
+        },
+        "insuranceHistory": {
+          "driverAge": 41,
+          "licenseYears": 17,
+          "accidentsAtFault": 2,
+          "accidentsNotAtFault": 3,
+          "accidentScopeYears": 2
+        },
+        "vehicle": {
+          "type": "secondHand",
+          "horsepower": 80,
+          "value": 22000,
+          "mileage": 40000,
+          "ageYears": 2.5
+        },
+        "withholdingObligation": {
+          "selfDeclaredDebt": false
+        }
+      },
+      "mockCreditsafeResponse": {
+        "creditRating": 40,
+        "creditRatingGrade": "D",
+        "creditRatingDescription": "High Risk",
+        "companyAgeYears": 1.5,
+        "legalForm": "VZW",
+        "isActive": true,
+        "companyStatus": "Active",
+        "bankruptcies": [],
+        "fraudScore": 65
+      }
+    },
+    {
+      "id": "TEST_USER_009",
+      "description": "Rejected - Inactive company with blocklist hit",
+      "expectedTier": "rejected",
+      "company": {
+        "vatNumber": "BE7777777777",
+        "name": "Inactive BV Corp",
+        "legalForm": "BV"
+      },
+      "questionnaire": {
+        "contact": {
+          "firstName": "Marc",
+          "lastName": "Dubois",
+          "email": "marc@inactivebv.be",
+          "phone": "+32 777 777 777",
+          "dateOfBirth": "1970-09-30",
+          "nationality": "BE",
+          "belgiumResident": true,
+          "isAdministrator": true,
+          "driversLicenseSinceYears": 30,
+          "adminTrackRecordYearsBelgium": 15
+        },
+        "legalHistory": {
+          "contactWithLegalAuthorities": true,
+          "troubleWithPaymentAtFinancingCompany": true,
+          "blacklistedBanks": ["BNP Paribas"]
+        },
+        "insuranceHistory": {
+          "driverAge": 54,
+          "licenseYears": 30,
+          "accidentsAtFault": 4,
+          "accidentsNotAtFault": 3,
+          "accidentScopeYears": 2
+        },
+        "vehicle": {
+          "type": "secondHand",
+          "horsepower": 200,
+          "value": 15000,
+          "mileage": 100000,
+          "ageYears": 5
+        },
+        "withholdingObligation": {
+          "selfDeclaredDebt": true
+        },
+        "_mock": {
+          "blocklistHit": true
+        }
+      },
+      "mockCreditsafeResponse": {
+        "creditRating": 20,
+        "creditRatingGrade": "E",
+        "creditRatingDescription": "Very High Risk",
+        "companyAgeYears": 8,
+        "legalForm": "BV",
+        "isActive": false,
+        "companyStatus": "Inactive",
+        "bankruptcies": [
+          { "type": "bankruptcy", "date": "2021-06-01", "status": "open", "yearsAgo": 3.5 },
+          { "type": "bankruptcy", "date": "2022-01-01", "status": "open", "yearsAgo": 3.0 },
+          { "type": "bankruptcy", "date": "2022-06-01", "status": "open", "yearsAgo": 2.5 },
+          { "type": "bankruptcy", "date": "2023-01-01", "status": "open", "yearsAgo": 2.0 }
+        ],
+        "fraudScore": 85
+      }
+    },
+    {
+      "id": "TEST_USER_010",
+      "description": "Rejected - Non-resident under 18",
+      "expectedTier": "rejected",
+      "company": {
+        "vatNumber": "BE8888888888",
+        "name": "Young BV Corp",
+        "legalForm": "BV"
+      },
+      "questionnaire": {
+        "contact": {
+          "firstName": "Tom",
+          "lastName": "Vandenberghe",
+          "email": "tom@youngbv.be",
+          "phone": "+32 888 888 888",
+          "dateOfBirth": "2008-05-15",
+          "nationality": "NL",
+          "belgiumResident": false,
+          "isAdministrator": false,
+          "driversLicenseSinceYears": 0,
+          "adminTrackRecordYearsBelgium": 0
+        },
+        "legalHistory": {
+          "contactWithLegalAuthorities": false,
+          "troubleWithPaymentAtFinancingCompany": false,
+          "blacklistedBanks": []
+        },
+        "insuranceHistory": {
+          "driverAge": 16,
+          "licenseYears": 0,
+          "accidentsAtFault": 0,
+          "accidentsNotAtFault": 0,
+          "accidentScopeYears": 2
+        },
+        "vehicle": {
+          "type": "new",
+          "horsepower": 50,
+          "value": 15000,
+          "mileage": 0,
+          "ageYears": 0
+        },
+        "withholdingObligation": {
+          "selfDeclaredDebt": false
+        }
+      },
+      "mockCreditsafeResponse": {
+        "creditRating": 90,
+        "creditRatingGrade": "A",
+        "creditRatingDescription": "Very Low Risk",
+        "companyAgeYears": 10,
+        "legalForm": "BV",
+        "isActive": true,
+        "companyStatus": "Active",
+        "bankruptcies": [],
+        "fraudScore": null
+      }
+    }
+  ]
+}
