@@ -117,7 +117,7 @@
             "fraudScore": 15,
             "sanctionListHit": false,
             "sanctionListJustbanBE": false,
-            "inhoudingsplichtHit": false,
+            "witholdingObligationHit": false,
             "blocklistHit": false,
             "adverseMedia": false
           }
@@ -134,7 +134,7 @@
           "name": "Tech Solutions BV",
           "address": "Technologiepark 5, 9000 Gent"
         },
-        "mockInhoudingsplichtResponse": {
+        "mockWitholdingObligationResponse": {
           "hit": false
         },
         "validationChecklist": {
@@ -151,7 +151,7 @@
             "companyYears": "✓ ~10 years (required: >=5)",
             "financialDisclosure": "✓ Yes (required: Yes)",
             "companyActive": "✓ true",
-            "inhoudingsplicht": "✓ false (required: No)",
+            "witholdingObligation": "✓ false (required: No)",
             "vatValid": "✓ true"
           },
           "adminCheck": {
@@ -290,7 +290,7 @@
             "fraudScore": 10,
             "sanctionListHit": false,
             "sanctionListJustbanBE": false,
-            "inhoudingsplichtHit": false,
+            "witholdingObligationHit": false,
             "blocklistHit": false,
             "adverseMedia": false
           }
@@ -321,7 +321,7 @@
             "companyYears": "✓ ~27 years (>=5)",
             "financialDisclosure": "✓ Yes",
             "companyActive": "✓ true",
-            "inhoudingsplicht": "✓ false",
+            "witholdingObligation": "✓ false",
             "vatValid": "✓ true"
           },
           "adminCheck": {
@@ -457,7 +457,7 @@
             "fraudScore": 32,
             "sanctionListHit": false,
             "sanctionListJustbanBE": false,
-            "inhoudingsplichtHit": false,
+            "witholdingObligationHit": false,
             "blocklistHit": false,
             "adverseMedia": false
           }
@@ -493,7 +493,7 @@
             "companyYears": "✓ ~4 years (>=3)",
             "financialDisclosure": "✓ Yes",
             "companyActive": "✓ true",
-            "inhoudingsplicht": "✓ false",
+            "witholdingObligation": "✓ false",
             "vatValid": "✓ true"
           },
           "adminCheck": {
@@ -630,7 +630,7 @@
             "fraudScore": 25,
             "sanctionListHit": false,
             "sanctionListJustbanBE": false,
-            "inhoudingsplichtHit": false,
+            "witholdingObligationHit": false,
             "blocklistHit": false,
             "adverseMedia": false
           }
@@ -777,7 +777,7 @@
             "fraudScore": 52,
             "sanctionListHit": false,
             "sanctionListJustbanBE": false,
-            "inhoudingsplichtHit": false,
+            "witholdingObligationHit": false,
             "blocklistHit": false,
             "adverseMedia": false
           }
@@ -812,7 +812,7 @@
             "companyYears": "✓ ~2.5 years (>=2)",
             "financialDisclosure": "✓ Not required for Fair tier",
             "companyActive": "✓ true",
-            "inhoudingsplicht": "✓ false"
+            "witholdingObligation": "✓ false"
           },
           "adminCheck": {
             "bankruptcies": "✓ 2 (max: 2 for Fair)",
@@ -935,7 +935,7 @@
             "fraudScore": 55,
             "sanctionListHit": false,
             "sanctionListJustbanBE": false,
-            "inhoudingsplichtHit": false,
+            "witholdingObligationHit": false,
             "blocklistHit": false,
             "adverseMedia": false
           }
@@ -980,7 +980,7 @@
       {
         "id": "TEST_USER_007",
         "expectedTier": "poor",
-        "description": "Sole proprietorship (Eenmanszaak), low credit (38), inhoudingsplicht hit, 3 bankruptcies",
+        "description": "Sole proprietorship (Eenmanszaak), low credit (38), witholdingObligation hit, 3 bankruptcies",
         "questionnaire": {
           "contact": {
             "firstName": "Dirk",
@@ -1081,7 +1081,7 @@
             "fraudScore": 65,
             "sanctionListHit": false,
             "sanctionListJustbanBE": false,
-            "inhoudingsplichtHit": true,
+            "witholdingObligationHit": true,
             "blocklistHit": false,
             "adverseMedia": true
           }
@@ -1122,7 +1122,7 @@
             "companyYears": "✓ ~1.5 years (>=1)",
             "financialDisclosure": "✓ Not required for Poor",
             "companyActive": "✓ true",
-            "inhoudingsplicht": "✓ true (allowed for Poor tier: Yes)",
+            "witholdingObligation": "✓ true (allowed for Poor tier: Yes)",
             "vatValid": "Manual review (allowed for Poor)"
           },
           "adminCheck": {
@@ -1149,7 +1149,7 @@
           "legalStatusCheck": {
             "legalForm": "✓ Eenmanszaak (allowed for Poor: Yes)"
           },
-          "whyNotFair": "Credit rating 38 < 50, 3 bankruptcies > 2, inhoudingsplicht hit, Eenmanszaak not allowed for Fair"
+          "whyNotFair": "Credit rating 38 < 50, 3 bankruptcies > 2, witholdingObligation hit, Eenmanszaak not allowed for Fair"
         }
       },
       {
@@ -1256,7 +1256,7 @@
             "fraudScore": 58,
             "sanctionListHit": false,
             "sanctionListJustbanBE": false,
-            "inhoudingsplichtHit": false,
+            "witholdingObligationHit": false,
             "blocklistHit": false,
             "adverseMedia": false
           }
@@ -1412,7 +1412,7 @@
             "fraudScore": 85,
             "sanctionListHit": true,
             "sanctionListJustbanBE": true,
-            "inhoudingsplichtHit": true,
+            "witholdingObligationHit": true,
             "blocklistHit": true,
             "adverseMedia": true
           }
@@ -1553,7 +1553,7 @@
             "fraudScore": 98,
             "sanctionListHit": true,
             "sanctionListJustbanBE": true,
-            "inhoudingsplichtHit": true,
+            "witholdingObligationHit": true,
             "blocklistHit": true,
             "adverseMedia": true
           }
@@ -1597,7 +1597,7 @@
         "minVehicleValue": 10000,
         "maxSecondHandMileage": 6000,
         "maxSecondHandAge": null,
-        "inhoudingsplichtAllowed": false,
+        "witholdingObligationAllowed": false,
         "sanctionListAllowed": false,
         "adverseMediaAllowed": false,
         "financialConsequences": {
@@ -1621,7 +1621,7 @@
         "minVehicleValue": 10000,
         "maxSecondHandMileage": 6000,
         "maxSecondHandAge": 0.5,
-        "inhoudingsplichtAllowed": false,
+        "witholdingObligationAllowed": false,
         "sanctionListAllowed": false,
         "adverseMediaAllowed": false,
         "financialConsequences": {
@@ -1645,7 +1645,7 @@
         "minVehicleValue": 10000,
         "maxSecondHandMileage": 6000,
         "maxSecondHandAge": 0.5,
-        "inhoudingsplichtAllowed": false,
+        "witholdingObligationAllowed": false,
         "sanctionListAllowed": false,
         "adverseMediaAllowed": false,
         "financialConsequences": {
@@ -1675,7 +1675,7 @@
         "maxAccidentsAtFault": 3,
         "maxAccidentsNotAtFault": 5,
         "accidentScopeYears": 2,
-        "inhoudingsplichtAllowed": true,
+        "witholdingObligationAllowed": true,
         "sanctionListAllowed": "manualReview",
         "adverseMediaAllowed": true,
         "financialConsequences": {
@@ -1723,7 +1723,7 @@
         "blocklistHit"
       ],
       "vies": ["vatValid"],
-      "inhoudingsplicht": ["inhoudingsplichtHit"],
+      "witholdingObligation": ["witholdingObligationHit"],
       "stockSystemDealer": [
         "vehicleHorsepower",
         "vehicleValue",

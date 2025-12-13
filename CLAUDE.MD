@@ -140,18 +140,18 @@ function evaluateCreditRating(creditRating: number, config: TierConfig): Tier {
 Check if a condition is allowed for each tier.
 
 ```typescript
-// Example: Inhoudingsplicht Rule
-function evaluateInhoudingsplicht(hasHit: boolean, config: TierConfig): Tier {
+// Example: WitholdingObligation Rule
+function evaluateWitholdingObligation(hasHit: boolean, config: TierConfig): Tier {
   if (!hasHit) {
     return Tier.EXCELLENT; // No hit = qualifies for best tier
   }
   
   // Has hit - check which tiers allow it
-  if (config.poor.inhoudingsplichtAllowed) return Tier.POOR;
+  if (config.poor.witholdingObligationAllowed) return Tier.POOR;
   return Tier.REJECTED;
 }
 
-// Config: Only Poor tier allows inhoudingsplicht hit
+// Config: Only Poor tier allows witholdingObligation hit
 // hasHit = false → EXCELLENT
 // hasHit = true → POOR
 ```
@@ -304,7 +304,7 @@ export const tierConfig: TierConfig = {
     minVehicleValue: 10000,
     
     // Flags
-    inhoudingsplichtAllowed: false,
+    witholdingObligationAllowed: false,
     
     // Financial terms
     financialTerms: {
@@ -361,7 +361,7 @@ interface CreditCheckRequest {
     legalHistory: LegalHistory;
     insuranceHistory: InsuranceHistory;
     vehicle: VehicleInfo;
-    inhoudingsplicht: InhoudingsplichtInfo;
+    witholdingObligation: WitholdingObligationInfo;
   };
 }
 ```
@@ -416,7 +416,7 @@ const response: CreditCheckResponse = {
     enrichedData: enrichedData,
     flags: {
       sanctionListHit: enrichedData.creditsafe.sanctionListHit,
-      inhoudingsplichtHit: enrichedData.questionnaire.inhoudingsplicht.selfDeclaredDebt,
+      witholdingObligationHit: enrichedData.questionnaire.witholdingObligation.selfDeclaredDebt,
       // ...
     }
   },
@@ -452,7 +452,7 @@ const response: CreditCheckResponse = {
 | Sole proprietorship | ❌ | ❌ | ❌ | ✅ |
 | VZW/ASBL | ❌ | ❌ | ❌ | ✅ |
 | CV/SC | ❌ | ❌ | ❌ | ✅ |
-| Inhoudingsplicht hit | ❌ | ❌ | ❌ | ✅ |
+| WitholdingObligation hit | ❌ | ❌ | ❌ | ✅ |
 | Adverse media | ❌ | ❌ | ❌ | ✅ |
 | Financial disclosure required | ✅ | ✅ | ❌ | ❌ |
 
@@ -622,7 +622,7 @@ testUsers.forEach(user => {
 
 5. **VIES failure ≠ rejection**: If VIES API fails, trigger manual review, don't reject.
 
-6. **Inhoudingsplicht is self-declared**: We don't have API access, so we rely on questionnaire. Consider manual review if uncertain.
+6. **WitholdingObligation is self-declared**: We don't have API access, so we rely on questionnaire. Consider manual review if uncertain.
 
 7. **Multiple directors**: If company has multiple directors, check bankruptcies for ALL of them, not just the contact person.
 

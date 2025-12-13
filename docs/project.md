@@ -43,7 +43,7 @@ The system evaluates applicants across multiple categories:
 - Minimum company age: Excellent 5yr, Good 3yr, Fair 2yr, Poor 1yr
 - Financial disclosure required: Excellent/Good only
 - Company registration must be active
-- Inhoudingsplicht hit: Only allowed for Poor tier
+- WitholdingObligation hit: Only allowed for Poor tier
 - VAT number validation: Required (Poor: manual if invalid)
 
 ### 3. Admin Check (Creditsafe + Questionnaire)
@@ -100,7 +100,7 @@ The system evaluates applicants across multiple categories:
 
 | Source | Data Points | Cost |
 |--------|-------------|------|
-| **Questionnaire** | Contact info, legal history, insurance history, vehicle details, self-declared inhoudingsplicht | Free |
+| **Questionnaire** | Contact info, legal history, insurance history, vehicle details, self-declared witholdingObligation | Free |
 | **Creditsafe API** | Credit rating, company info, directors, bankruptcies, fraud score, legal form, sanctions | Paid |
 | **VIES API (EU)** | VAT number validation, company name, address | Free |
 
@@ -116,7 +116,7 @@ Request:
     legalHistory: { contactWithLegalAuthorities, troubleWithPayment, ... },
     insuranceHistory: { accidentsAtFault, accidentsNotAtFault, ... },
     vehicle: { type, horsepower, value, mileage, ageYears },
-    inhoudingsplicht: { selfDeclaredDebt, certificateUploaded }
+    witholdingObligation: { selfDeclaredDebt, certificateUploaded }
   },
   company: {
     vatNumber: "BE0123456789",

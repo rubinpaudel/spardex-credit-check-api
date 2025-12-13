@@ -28,7 +28,7 @@ export interface TierThresholds {
   maxSecondHandAge: number | null; // In years, null if N/A
 
   // Boolean flags
-  inhoudingsplichtAllowed: boolean;
+  witholdingObligationAllowed: boolean;
 
   // Insurance (only applies to POOR tier)
   insuranceChecks?: {
@@ -67,7 +67,7 @@ export const tierThresholds: Record<
     maxSecondHandMileage: null, // N/A - no second hand allowed
     maxSecondHandAge: null,
 
-    inhoudingsplichtAllowed: false,
+    witholdingObligationAllowed: false,
 
     // No insurance checks for Excellent
 
@@ -100,7 +100,7 @@ export const tierThresholds: Record<
     maxSecondHandMileage: 6000, // Max 6,000 km
     maxSecondHandAge: 0.5, // Max 6 months old
 
-    inhoudingsplichtAllowed: false,
+    witholdingObligationAllowed: false,
 
     financialTerms: {
       yearlyInterestPercent: 5.5,
@@ -131,7 +131,7 @@ export const tierThresholds: Record<
     maxSecondHandMileage: 6000,
     maxSecondHandAge: 0.5,
 
-    inhoudingsplichtAllowed: false,
+    witholdingObligationAllowed: false,
 
     financialTerms: {
       yearlyInterestPercent: 12,
@@ -163,7 +163,7 @@ export const tierThresholds: Record<
     maxSecondHandMileage: 50000,
     maxSecondHandAge: 3,
 
-    inhoudingsplichtAllowed: true, // Only tier that allows it
+    witholdingObligationAllowed: true, // Only tier that allows it
 
     // Insurance checks ONLY apply to Poor tier
     insuranceChecks: {
