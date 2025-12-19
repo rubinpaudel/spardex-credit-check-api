@@ -67,8 +67,6 @@ export interface QuestionnaireData {
 // Company identification
 export interface CompanyInfo {
   vatNumber: string; // Format: "BE0123456789"
-  name: string;
-  legalForm: string; // "BV", "NV", "VOF", etc.
 }
 
 // Complete request

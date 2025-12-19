@@ -3,8 +3,6 @@ import { t } from "elysia";
 export const creditCheckSchema = t.Object({
   company: t.Object({
     vatNumber: t.String({ minLength: 12, maxLength: 12 }), // "BE" + 10 digits
-    name: t.String({ minLength: 1 }),
-    legalForm: t.String({ minLength: 1 }),
   }),
   questionnaire: t.Object({
     contact: t.Object({
