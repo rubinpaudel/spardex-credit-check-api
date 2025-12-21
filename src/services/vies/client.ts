@@ -54,7 +54,8 @@ export async function validateVatNumber(
       valid: data.isValid,
       companyName: data.name,
       companyAddress: data.address,
-      error: data.userError,
+      // VIES API returns "VALID" as userError when VAT is valid - don't treat as error
+      error: data.userError === "VALID" ? undefined : data.userError,
     };
   } catch (error) {
     if (error instanceof Error && error.name === "AbortError") {

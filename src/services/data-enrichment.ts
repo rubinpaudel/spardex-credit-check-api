@@ -19,16 +19,13 @@ export interface EnrichmentResult {
 
 /**
  * Enrich request data with external API calls.
- * Calls Creditsafe, VIES, and KYC Protect in parallel.
+ * Calls Creditsafe and VIES in parallel first, then KYC Protect
+ * (which needs company name from Creditsafe/VIES).
  *
  * @param vatNumber - The VAT number to look up
- * @param companyName - The company name for KYC screening
  * @returns Enriched data from external sources
  */
-export async function enrichData(
-  vatNumber: string,
-  companyName?: string
-): Promise<EnrichmentResult> {
+export async function enrichData(vatNumber: string): Promise<EnrichmentResult> {
   const errors: string[] = [];
   let creditsafe: CreditsafeData | null = null;
   let vies: ViesResult | null = null;
@@ -37,16 +34,11 @@ export async function enrichData(
   let viesFailed = false;
   let kycProtectFailed = false;
 
-  // Call APIs in parallel
-  const [creditsafeResult, viesResult, kycProtectResult] =
-    await Promise.allSettled([
-      getCompanyReportByVat(vatNumber),
-      validateVatNumber(vatNumber),
-      // Only call KYC Protect if we have a company name
-      companyName
-        ? searchBusinessWithHits(companyName, "BE")
-        : Promise.resolve(null),
-    ]);
+  // Step 1: Call Creditsafe and VIES in parallel
+  const [creditsafeResult, viesResult] = await Promise.allSettled([
+    getCompanyReportByVat(vatNumber),
+    validateVatNumber(vatNumber),
+  ]);
 
   // Process Creditsafe result
   if (creditsafeResult.status === "fulfilled") {
@@ -64,7 +56,9 @@ export async function enrichData(
   // Process VIES result
   if (viesResult.status === "fulfilled") {
     vies = viesResult.value;
-    if (viesResult.value.error) {
+    // Only treat as error if there's an error message that's not "VALID"
+    // (VIES API returns "VALID" as userError when VAT is valid - confusing API design)
+    if (viesResult.value.error && viesResult.value.error !== "VALID") {
       viesFailed = true;
       errors.push(`VIES error: ${viesResult.value.error}`);
     }
@@ -73,22 +67,24 @@ export async function enrichData(
     errors.push(`VIES API error: ${viesResult.reason}`);
   }
 
-  // Process KYC Protect result
-  if (kycProtectResult.status === "fulfilled") {
-    if (kycProtectResult.value) {
-      const searchResult = kycProtectResult.value;
+  // Step 2: Call KYC Protect with company name (prefer Creditsafe, fallback to VIES)
+  const companyName = creditsafe?.companyName || vies?.companyName;
+
+  if (companyName) {
+    try {
+      const searchResult = await searchBusinessWithHits(companyName, "BE");
       kycProtect = mapKycProtectResponse(
         searchResult,
         searchResult.hits,
-        companyName || ""
+        companyName
       );
+    } catch (error) {
+      kycProtectFailed = true;
+      errors.push(`KYC Protect API error: ${error}`);
     }
-    // If null (no company name provided), we don't mark as failed
-    // since it was intentionally skipped
-  } else {
-    kycProtectFailed = true;
-    errors.push(`KYC Protect API error: ${kycProtectResult.reason}`);
   }
+  // If no company name available, we don't mark kycProtect as failed
+  // since we couldn't call it - rules will handle this gracefully
 
   return {
     creditsafe,

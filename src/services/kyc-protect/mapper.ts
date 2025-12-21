@@ -7,9 +7,32 @@
 import {
   KycBusinessSearchResponse,
   KycHit,
-  KycHitCategory,
+  KycDataset,
   KycProtectData,
 } from "./types";
+
+/**
+ * Check if a hit is relevant for flagging.
+ * A hit is only considered relevant if:
+ * 1. It has been human-verified as a true match (decision === "trueMatch")
+ * 2. The name exactly matches the searched company name (case-insensitive)
+ *
+ * @param hit - The hit to check
+ * @param searchedName - The company name that was searched
+ * @returns True if the hit should be considered for flagging
+ */
+function isRelevantHit(hit: KycHit, searchedName: string): boolean {
+  // Must be human-verified as a true match
+  if (hit.decision !== "trueMatch") {
+    return false;
+  }
+
+  // Must be exact name match (case-insensitive)
+  const normalizedHitName = hit.name.toLowerCase().trim();
+  const normalizedSearchName = searchedName.toLowerCase().trim();
+
+  return normalizedHitName === normalizedSearchName;
+}
 
 /**
  * Map KYC Protect search results to normalized data.
@@ -24,18 +47,19 @@ export function mapKycProtectResponse(
   hits: KycHit[],
   companyName: string
 ): KycProtectData {
-  // Check for specific hit categories
-  const hasSanctionHit = hits.some((hit) =>
-    hit.categories.includes("sanctions")
+  // Filter to only relevant hits (exact name match + trueMatch decision)
+  const relevantHits = hits.filter((hit) => isRelevantHit(hit, companyName));
+
+  // Check for specific dataset codes in relevant hits only
+  const hasSanctionHit = relevantHits.some((hit) =>
+    hit.datasets.includes("SAN")
   );
-  const hasEnforcementHit = hits.some(
-    (hit) =>
-      hit.categories.includes("enforcement") ||
-      hit.categories.includes("regulatory")
+  const hasEnforcementHit = relevantHits.some((hit) =>
+    hit.datasets.includes("ENF")
   );
-  const hasPepHit = hits.some((hit) => hit.categories.includes("pep"));
-  const hasAdverseMediaHit = hits.some((hit) =>
-    hit.categories.includes("adverseMedia")
+  const hasPepHit = relevantHits.some((hit) => hit.datasets.includes("PEP"));
+  const hasAdverseMediaHit = relevantHits.some((hit) =>
+    hit.datasets.includes("AM")
   );
 
   return {
@@ -45,8 +69,8 @@ export function mapKycProtectResponse(
     hasEnforcementHit,
     hasPepHit,
     hasAdverseMediaHit,
-    totalHits: hits.length,
-    hits,
+    totalHits: relevantHits.length,
+    hits: relevantHits,
   };
 }
 
@@ -75,32 +99,32 @@ export function hasHighRiskHits(data: KycProtectData): boolean {
 }
 
 /**
- * Get hit categories as a readable string.
+ * Get hit datasets as a readable string.
  */
-export function getHitCategoriesDescription(hits: KycHit[]): string {
-  const allCategories = new Set<KycHitCategory>();
+export function getHitDatasetsDescription(hits: KycHit[]): string {
+  const allDatasets = new Set<KycDataset>();
 
   for (const hit of hits) {
-    for (const category of hit.categories) {
-      allCategories.add(category);
+    for (const dataset of hit.datasets) {
+      allDatasets.add(dataset);
     }
   }
 
-  if (allCategories.size === 0) {
+  if (allDatasets.size === 0) {
     return "None";
   }
 
-  const categoryLabels: Record<KycHitCategory, string> = {
-    sanctions: "Sanctions",
-    pep: "PEP",
-    adverseMedia: "Adverse Media",
-    enforcement: "Enforcement",
-    regulatory: "Regulatory",
-    stateOwned: "State Owned",
-    other: "Other",
+  const datasetLabels: Record<KycDataset, string> = {
+    SAN: "Sanctions",
+    PEP: "PEP",
+    AM: "Adverse Media",
+    ENF: "Enforcement",
+    POI: "Persons of Interest",
+    INS: "Insolvency",
+    SOE: "State-Owned Enterprises",
   };
 
-  return Array.from(allCategories)
-    .map((cat) => categoryLabels[cat] || cat)
+  return Array.from(allDatasets)
+    .map((ds) => datasetLabels[ds] || ds)
     .join(", ");
 }

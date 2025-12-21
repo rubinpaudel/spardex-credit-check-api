@@ -192,22 +192,38 @@ describe("Credit Check Integration Tests", () => {
       const searchBusinessWithHitsSpy = spyOn(kycProtectClient, "searchBusinessWithHits")
         .mockResolvedValue({
           id: "kyc-search-id",
-          searchCriteria: { name: user.company.name },
-          hitCount: kycResponse.totalHits,
-          created: new Date().toISOString(),
+          name: user.company.name,
+          threshold: 90,
+          type: "business",
+          datasets: ["AM", "INS", "PEP", "POI", "ENF", "SAN", "SOE"],
+          status: "new",
+          totalHitCount: kycResponse.totalHits,
+          truePositiveHitsCount: kycResponse.totalHits,
+          falsePositiveHitsCount: 0,
+          undecidedHitsCount: 0,
+          createdAt: new Date().toISOString(),
+          modifiedAt: new Date().toISOString(),
           hits: kycResponse.totalHits > 0
             ? [
                 {
-                  hitId: "hit-1",
-                  matchScore: 95,
+                  id: "hit-1",
+                  hitScore: 95,
                   name: user.company.name,
+                  match: user.company.name,
                   countries: ["BE"],
-                  categories: [
-                    ...(kycResponse.hasSanctionHit ? ["sanctions" as const] : []),
-                    ...(kycResponse.hasEnforcementHit ? ["enforcement" as const] : []),
-                    ...(kycResponse.hasPepHit ? ["pep" as const] : []),
-                    ...(kycResponse.hasAdverseMediaHit ? ["adverseMedia" as const] : []),
+                  datasets: [
+                    ...(kycResponse.hasSanctionHit ? ["SAN" as const] : []),
+                    ...(kycResponse.hasEnforcementHit ? ["ENF" as const] : []),
+                    ...(kycResponse.hasPepHit ? ["PEP" as const] : []),
+                    ...(kycResponse.hasAdverseMediaHit ? ["AM" as const] : []),
                   ],
+                  decision: "trueMatch" as const,
+                  note: null,
+                  modifiedById: 1,
+                  modifiedBy: "Test",
+                  modifiedAt: new Date().toISOString(),
+                  createdAt: new Date().toISOString(),
+                  supersededHit: null,
                 },
               ]
             : [],
@@ -262,9 +278,17 @@ describe("Credit Check Integration Tests", () => {
       });
       spyOn(kycProtectClient, "searchBusinessWithHits").mockResolvedValue({
         id: "kyc-search-id",
-        searchCriteria: { name: "Test Company" },
-        hitCount: 0,
-        created: new Date().toISOString(),
+        name: "Test Company",
+        threshold: 90,
+        type: "business",
+        datasets: ["AM", "INS", "PEP", "POI", "ENF", "SAN", "SOE"],
+        status: "new",
+        totalHitCount: 0,
+        truePositiveHitsCount: 0,
+        falsePositiveHitsCount: 0,
+        undecidedHitsCount: 0,
+        createdAt: new Date().toISOString(),
+        modifiedAt: new Date().toISOString(),
         hits: [],
       });
 

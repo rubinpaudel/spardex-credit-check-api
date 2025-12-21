@@ -1,6 +1,7 @@
 import { TierName } from "./tiers";
 import { CreditsafeData } from "../services/creditsafe/mapper";
 import { ViesResult } from "../services/vies/types";
+import { KycProtectData } from "../services/kyc-protect/types";
 
 // Financial terms that apply to a tier
 export interface FinancialTerms {
@@ -26,6 +27,7 @@ export interface RuleResult {
 export interface EnrichedData {
   creditsafe: CreditsafeData | null;
   vies: ViesResult | null;
+  kycProtect: KycProtectData | null;
   errors: string[];
 }
 

@@ -25,39 +25,50 @@ export interface KycBusinessSearchRequest {
  * Response from POST /compliance/kyc-protect/searches/businesses
  */
 export interface KycBusinessSearchResponse {
-  id: string; // Search ID
-  searchCriteria: {
-    name: string;
-    countryCode?: string;
-  };
-  hitCount: number;
-  created: string; // ISO date
+  id: string;
+  name: string;
+  threshold: number;
+  type: string;
+  datasets: string[];
+  status: string;
+  totalHitCount: number;
+  truePositiveHitsCount: number;
+  falsePositiveHitsCount: number;
+  undecidedHitsCount: number;
+  createdAt: string;
+  modifiedAt: string;
 }
+
+/**
+ * Dataset codes from the KYC Protect API.
+ */
+export type KycDataset =
+  | "SAN" // Sanctions
+  | "AM" // Adverse Media
+  | "PEP" // Politically Exposed Persons
+  | "ENF" // Enforcement
+  | "POI" // Persons of Interest
+  | "INS" // Insolvency
+  | "SOE"; // State-Owned Enterprises
 
 /**
  * Individual hit from a KYC screening search.
  */
 export interface KycHit {
-  hitId: string;
-  matchScore: number; // 0-100
+  id: string;
+  hitScore: number;
   name: string;
+  match: string;
   countries: string[];
-  categories: KycHitCategory[];
-  decision?: KycHitDecision;
-  modifiedAt?: string;
+  datasets: KycDataset[];
+  decision: KycHitDecision;
+  note: string | null;
+  modifiedById: number;
+  modifiedBy: string;
+  modifiedAt: string;
+  createdAt: string;
+  supersededHit: KycHit | null;
 }
-
-/**
- * Category of a KYC hit.
- */
-export type KycHitCategory =
-  | "sanctions"
-  | "pep"
-  | "adverseMedia"
-  | "enforcement"
-  | "regulatory"
-  | "stateOwned"
-  | "other";
 
 /**
  * Decision status for a hit.
@@ -72,8 +83,8 @@ export type KycHitDecision =
  * Response from GET /compliance/kyc-protect/searches/businesses/{searchId}/hits
  */
 export interface KycHitsResponse {
-  hits: KycHit[];
-  totalHits: number;
+  items: KycHit[];
+  totalSize: number;
 }
 
 // ============================================================================

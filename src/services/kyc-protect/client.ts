@@ -66,7 +66,7 @@ export async function getBusinessSearchHits(
 export async function searchBusinessWithHits(
   name: string,
   countryCode?: string
-): Promise<KycBusinessSearchResponse & { hits: KycHitsResponse["hits"] }> {
+): Promise<KycBusinessSearchResponse & { hits: KycHitsResponse["items"] }> {
   // First, create the search
   const searchResponse = await searchBusiness({
     name,
@@ -74,7 +74,7 @@ export async function searchBusinessWithHits(
   });
 
   // If no hits, return early
-  if (searchResponse.hitCount === 0) {
+  if (searchResponse.totalHitCount === 0) {
     return {
       ...searchResponse,
       hits: [],
@@ -86,6 +86,6 @@ export async function searchBusinessWithHits(
 
   return {
     ...searchResponse,
-    hits: hitsResponse.hits,
+    hits: hitsResponse.items,
   };
 }
