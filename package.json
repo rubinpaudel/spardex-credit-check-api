@@ -5,7 +5,8 @@
     "dev": "bun run --watch src/index.ts",
     "build": "bun build src/index.ts --outdir=dist --target=bun",
     "start": "NODE_ENV=production bun run dist/index.js",
-    "test": "bun test"
+    "test": "bun test",
+    "generate-test-report": "bun run scripts/generate-test-report.ts"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.4.0",

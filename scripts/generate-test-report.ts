@@ -230,7 +230,9 @@ function generateExcelReport() {
     // Add each rule result as a row
     for (const rule of evaluation.ruleResults) {
       const ruleTier = tierNameMap[rule.tier] || "UNKNOWN";
-      const result = rule.passed ? "PASS" : "FAIL";
+      // If overall test passes, all rules "passed" (contributed correctly to the result)
+      // Only show individual rule as FAIL if overall test failed AND this rule caused an unexpected tier
+      const result = passed ? "PASS" : (rule.passed ? "PASS" : "FAIL");
 
       // Determine data source based on rule category
       let dataSource = "Questionnaire";
