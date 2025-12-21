@@ -10,25 +10,7 @@ import { logger } from "../config/logger";
 
 export const creditCheckRoutes = new Elysia({ prefix: "/api/v1" }).post(
   "/credit-check",
-  async ({ body, query }): Promise<CreditCheckResponse> => {
-    // If tier query param provided, use it for testing (bypass rules)
-    if (query.tier) {
-      const tier = stringToTier(query.tier);
-      const financialTerms = getFinancialTerms(tier);
-
-      return {
-        success: true,
-        result: {
-          tier: tierToString(tier),
-          requiresManualReview: tier === Tier.MANUAL_REVIEW,
-          financialTerms: financialTerms!,
-          ruleResults: [],
-        },
-        requestId: crypto.randomUUID(),
-        timestamp: new Date().toISOString(),
-      };
-    }
-
+  async ({ body }): Promise<CreditCheckResponse> => {
     const requestId = crypto.randomUUID();
     const timestamp = new Date().toISOString();
 
@@ -130,7 +112,7 @@ export const creditCheckRoutes = new Elysia({ prefix: "/api/v1" }).post(
       tags: ["Credit Check"],
       summary: "Perform credit check",
       description:
-        "Evaluates a company's creditworthiness for vehicle leasing and returns tier classification with financial terms. Use ?tier=poor|fair|good|excellent for testing.",
+        "Evaluates a company's creditworthiness for vehicle leasing and returns tier classification with financial terms.",
     },
   }
 );
