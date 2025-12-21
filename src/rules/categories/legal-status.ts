@@ -19,9 +19,21 @@ export const legalFormRule: Rule = {
   category: "legal_status",
 
   evaluate(context: RuleContext): RuleResult {
-    // Use Creditsafe legal form if available (normalized), otherwise use company.legalForm
-    const legalForm =
-      context.creditsafe?.legalForm ?? context.company.legalForm;
+    // Use Creditsafe legal form if available (normalized)
+    const legalForm = context.creditsafe?.legalForm;
+
+    // If no Creditsafe data, we can't determine legal form - needs manual review
+    if (!legalForm) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.MANUAL_REVIEW,
+        passed: false,
+        reason: "Legal form unavailable - Creditsafe data not available",
+        actualValue: null,
+        expectedValue: "Legal form required",
+      };
+    }
 
     // Check tiers from best to worst
     const tiers = [Tier.EXCELLENT, Tier.GOOD, Tier.FAIR, Tier.POOR] as const;

@@ -410,8 +410,8 @@
     },
     {
       "id": "TEST_USER_008",
-      "description": "Poor tier - VZW with payment trouble history",
-      "expectedTier": "poor",
+      "description": "Manual review - VZW with payment trouble history",
+      "expectedTier": "manual_review",
       "company": {
         "vatNumber": "BE6666666666",
         "name": "VZW Association",
@@ -585,6 +585,120 @@
         "companyStatus": "Active",
         "bankruptcies": [],
         "fraudScore": null
+      }
+    },
+    {
+      "id": "TEST_USER_011",
+      "description": "Manual review - Excellent profile but contact with legal authorities",
+      "expectedTier": "manual_review",
+      "company": {
+        "vatNumber": "BE1111100011",
+        "name": "Legal Contact BV",
+        "legalForm": "BV"
+      },
+      "questionnaire": {
+        "contact": {
+          "firstName": "Anna",
+          "lastName": "Legal",
+          "email": "anna@legalcontact.be",
+          "phone": "+32 111 100 011",
+          "dateOfBirth": "1980-05-20",
+          "nationality": "BE",
+          "belgiumResident": true,
+          "isAdministrator": true,
+          "driversLicenseSinceYears": 20,
+          "adminTrackRecordYearsBelgium": 10
+        },
+        "legalHistory": {
+          "contactWithLegalAuthorities": true,
+          "troubleWithPaymentAtFinancingCompany": false,
+          "blacklistedBanks": []
+        },
+        "insuranceHistory": {
+          "driverAge": 44,
+          "licenseYears": 20,
+          "accidentsAtFault": 0,
+          "accidentsNotAtFault": 0,
+          "accidentScopeYears": 2
+        },
+        "vehicle": {
+          "type": "new",
+          "horsepower": 120,
+          "value": 35000,
+          "mileage": 0,
+          "ageYears": 0
+        },
+        "withholdingObligation": {
+          "selfDeclaredDebt": false
+        }
+      },
+      "mockCreditsafeResponse": {
+        "creditRating": 95,
+        "creditRatingGrade": "A",
+        "creditRatingDescription": "Very Low Risk",
+        "companyAgeYears": 10,
+        "legalForm": "BV",
+        "isActive": true,
+        "companyStatus": "Active",
+        "bankruptcies": [],
+        "fraudScore": null
+      }
+    },
+    {
+      "id": "TEST_USER_012",
+      "description": "Manual review - Excellent profile but has blacklisted banks",
+      "expectedTier": "manual_review",
+      "company": {
+        "vatNumber": "BE1111200012",
+        "name": "Bank Issues BV",
+        "legalForm": "BV"
+      },
+      "questionnaire": {
+        "contact": {
+          "firstName": "Bert",
+          "lastName": "Banker",
+          "email": "bert@bankissues.be",
+          "phone": "+32 111 200 012",
+          "dateOfBirth": "1978-08-10",
+          "nationality": "BE",
+          "belgiumResident": true,
+          "isAdministrator": true,
+          "driversLicenseSinceYears": 22,
+          "adminTrackRecordYearsBelgium": 12
+        },
+        "legalHistory": {
+          "contactWithLegalAuthorities": false,
+          "troubleWithPaymentAtFinancingCompany": false,
+          "blacklistedBanks": ["ING", "KBC"]
+        },
+        "insuranceHistory": {
+          "driverAge": 46,
+          "licenseYears": 22,
+          "accidentsAtFault": 0,
+          "accidentsNotAtFault": 0,
+          "accidentScopeYears": 2
+        },
+        "vehicle": {
+          "type": "new",
+          "horsepower": 130,
+          "value": 40000,
+          "mileage": 0,
+          "ageYears": 0
+        },
+        "withholdingObligation": {
+          "selfDeclaredDebt": false
+        }
+      },
+      "mockCreditsafeResponse": {
+        "creditRating": 92,
+        "creditRatingGrade": "A",
+        "creditRatingDescription": "Very Low Risk",
+        "companyAgeYears": 12,
+        "legalForm": "BV",
+        "isActive": true,
+        "companyStatus": "Active",
+        "bankruptcies": [],
+        "fraudScore": 20
       }
     }
   ]

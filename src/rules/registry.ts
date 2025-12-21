@@ -5,6 +5,11 @@ import {
   isAdministratorRule,
 } from "./categories/general";
 import {
+  contactWithLegalAuthoritiesRule,
+  troubleWithPaymentRule,
+  blacklistedBanksRule,
+} from "./categories/legal-history";
+import {
   creditRatingRule,
   companyAgeRule,
   withholdingObligationRule,
@@ -37,6 +42,10 @@ export const allRules: Rule[] = [
   minimumAgeRule,
   belgiumResidencyRule,
   isAdministratorRule,
+  // Legal history rules
+  contactWithLegalAuthoritiesRule,
+  troubleWithPaymentRule,
+  blacklistedBanksRule,
   // Company rules
   vatValidRule,
   companyActiveRule,
