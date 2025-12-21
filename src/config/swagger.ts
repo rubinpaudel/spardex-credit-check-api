@@ -5,7 +5,7 @@ export const swaggerConfig = swagger({
     info: {
       title: "Spardex API",
       version: "1.0.0",
-      description: "Production-ready Elysia backend API",
+      description: "Spardex credit check api",
     },
     tags: [
       { name: "Health", description: "Health check endpoints" },
