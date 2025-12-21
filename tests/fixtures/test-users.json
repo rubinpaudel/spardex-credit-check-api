@@ -508,9 +508,6 @@
         },
         "withholdingObligation": {
           "selfDeclaredDebt": true
-        },
-        "_mock": {
-          "blocklistHit": true
         }
       },
       "mockCreditsafeResponse": {
@@ -528,6 +525,13 @@
           { "type": "bankruptcy", "date": "2023-01-01", "status": "open", "yearsAgo": 2.0 }
         ],
         "fraudScore": 85
+      },
+      "mockKycProtectResponse": {
+        "hasSanctionHit": false,
+        "hasEnforcementHit": true,
+        "hasPepHit": false,
+        "hasAdverseMediaHit": false,
+        "totalHits": 1
       }
     },
     {

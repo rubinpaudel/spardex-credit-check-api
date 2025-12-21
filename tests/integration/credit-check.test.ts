@@ -9,6 +9,7 @@ import testUsersData from "../fixtures/test-users.json";
 // Mock modules before importing
 import * as creditsafeClient from "../../src/services/creditsafe/client";
 import * as viesClient from "../../src/services/vies/client";
+import * as kycProtectClient from "../../src/services/kyc-protect/client";
 
 interface TestUser {
   id: string;
@@ -19,7 +20,14 @@ interface TestUser {
     name: string;
     legalForm: string;
   };
-  questionnaire: Record<string, unknown>;
+  questionnaire: {
+    contact: {
+      firstName: string;
+      lastName: string;
+      [key: string]: unknown;
+    };
+    [key: string]: unknown;
+  };
   mockCreditsafeResponse: {
     creditRating: number;
     creditRatingGrade: string;
@@ -35,6 +43,13 @@ interface TestUser {
       yearsAgo: number;
     }>;
     fraudScore: number | null;
+  };
+  mockKycProtectResponse?: {
+    hasSanctionHit: boolean;
+    hasEnforcementHit: boolean;
+    hasPepHit: boolean;
+    hasAdverseMediaHit: boolean;
+    totalHits: number;
   };
 }
 
@@ -57,6 +72,11 @@ describe("Credit Check Integration Tests", () => {
   // Test each user
   testUsers.forEach((user) => {
     it(`should return ${user.expectedTier} for ${user.id}: ${user.description}`, async () => {
+      // Calculate director appointment date (5 years ago for all test users)
+      const directorAppointmentDate = new Date(
+        Date.now() - 5 * 365.25 * 24 * 60 * 60 * 1000
+      ).toISOString().split("T")[0];
+
       // Mock Creditsafe getCompanyReportByVat to return our test data
       const mockReport = {
         report: {
@@ -68,6 +88,10 @@ describe("Credit Check Integration Tests", () => {
             companyRegistrationNumber: user.company.vatNumber.slice(2),
             companyStatus: {
               status: user.mockCreditsafeResponse.companyStatus,
+            },
+            latestShareholdersEquityFigure: {
+              currency: "EUR",
+              value: 50000,
             },
           },
           companyIdentification: {
@@ -106,7 +130,22 @@ describe("Credit Check Integration Tests", () => {
               }
             : undefined,
           directors: {
-            currentDirectors: [],
+            currentDirectors: [
+              {
+                id: "director-1",
+                idType: "test",
+                name: `${user.questionnaire.contact.firstName} ${user.questionnaire.contact.lastName}`,
+                firstName: user.questionnaire.contact.firstName,
+                lastName: user.questionnaire.contact.lastName,
+                directorType: "Director",
+                positions: [
+                  {
+                    positionName: "Director",
+                    dateAppointed: directorAppointmentDate,
+                  },
+                ],
+              },
+            ],
           },
           negativeInformation: {
             bankruptcyInformation: user.mockCreditsafeResponse.bankruptcies.map((b) => ({
@@ -119,6 +158,15 @@ describe("Credit Check Integration Tests", () => {
               numberOfPossible: 0,
             },
           },
+          financialStatements: [
+            {
+              type: "Annual",
+              yearEndDate: "2023-12-31",
+              numberOfWeeks: 52,
+              currency: "EUR",
+              consolidatedAccounts: false,
+            },
+          ],
         },
       };
 
@@ -131,6 +179,38 @@ describe("Credit Check Integration Tests", () => {
           valid: true,
           companyName: user.company.name,
           companyAddress: "Test Address, Belgium",
+        });
+
+      // Mock KYC Protect - use user's mockKycProtectResponse or default to no hits
+      const kycResponse = user.mockKycProtectResponse ?? {
+        hasSanctionHit: false,
+        hasEnforcementHit: false,
+        hasPepHit: false,
+        hasAdverseMediaHit: false,
+        totalHits: 0,
+      };
+      const searchBusinessWithHitsSpy = spyOn(kycProtectClient, "searchBusinessWithHits")
+        .mockResolvedValue({
+          id: "kyc-search-id",
+          searchCriteria: { name: user.company.name },
+          hitCount: kycResponse.totalHits,
+          created: new Date().toISOString(),
+          hits: kycResponse.totalHits > 0
+            ? [
+                {
+                  hitId: "hit-1",
+                  matchScore: 95,
+                  name: user.company.name,
+                  countries: ["BE"],
+                  categories: [
+                    ...(kycResponse.hasSanctionHit ? ["sanctions" as const] : []),
+                    ...(kycResponse.hasEnforcementHit ? ["enforcement" as const] : []),
+                    ...(kycResponse.hasPepHit ? ["pep" as const] : []),
+                    ...(kycResponse.hasAdverseMediaHit ? ["adverseMedia" as const] : []),
+                  ],
+                },
+              ]
+            : [],
         });
 
       // Build request
@@ -168,6 +248,7 @@ describe("Credit Check Integration Tests", () => {
       // Restore mocks
       getCompanyReportByVatSpy.mockRestore();
       validateVatNumberSpy.mockRestore();
+      searchBusinessWithHitsSpy.mockRestore();
     });
   });
 
@@ -178,6 +259,13 @@ describe("Credit Check Integration Tests", () => {
       spyOn(viesClient, "validateVatNumber").mockResolvedValue({
         valid: true,
         companyName: "Test Company",
+      });
+      spyOn(kycProtectClient, "searchBusinessWithHits").mockResolvedValue({
+        id: "kyc-search-id",
+        searchCriteria: { name: "Test Company" },
+        hitCount: 0,
+        created: new Date().toISOString(),
+        hits: [],
       });
 
       const response = await app.handle(

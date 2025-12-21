@@ -21,7 +21,11 @@ import {
   adminBankruptciesRule,
   adminTrackRecordRule,
 } from "./categories/admin";
-import { fraudScoreRule, sanctionListRule } from "./categories/fraud";
+import {
+  fraudScoreRule,
+  sanctionListRule,
+  adverseMediaRule,
+} from "./categories/fraud";
 import { legalFormRule } from "./categories/legal-status";
 import { blocklistRule } from "./categories/blocklist";
 import {
@@ -63,6 +67,7 @@ export const allRules: Rule[] = [
   // Fraud rules
   fraudScoreRule,
   sanctionListRule,
+  adverseMediaRule,
   // Legal status rules
   legalFormRule,
   // Asset rules

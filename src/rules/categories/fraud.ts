@@ -162,3 +162,90 @@ export const sanctionListRule: Rule = {
     };
   },
 };
+
+/**
+ * Rule: Adverse media hit.
+ *
+ * Checks for adverse media hits from KYC Protect.
+ *
+ * - No hit → EXCELLENT (doesn't restrict)
+ * - Hit → POOR (only Poor tier allows adverse media)
+ */
+export const adverseMediaRule: Rule = {
+  id: "adverse-media",
+  category: "fraud",
+
+  evaluate(context: RuleContext): RuleResult {
+    // If KYC Protect failed, we can't verify - trigger manual review
+    if (context.kycProtectFailed) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.MANUAL_REVIEW,
+        passed: false,
+        reason: "KYC Protect check unavailable - manual review required",
+        actualValue: null,
+        expectedValue: "No adverse media hits",
+      };
+    }
+
+    // If no KYC data available, default to no hit
+    if (!context.kycProtect) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.EXCELLENT,
+        passed: true,
+        reason: "KYC screening not performed - no adverse media check",
+        actualValue: false,
+        expectedValue: false,
+      };
+    }
+
+    const hasAdverseMediaHit = context.kycProtect.hasAdverseMediaHit;
+
+    if (!hasAdverseMediaHit) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.EXCELLENT,
+        passed: true,
+        reason: "No adverse media hit",
+        actualValue: {
+          hasAdverseMediaHit: false,
+          totalHits: context.kycProtect.totalHits,
+        },
+        expectedValue: false,
+      };
+    }
+
+    // Has hit - check if Poor tier allows it
+    if (tierThresholds[Tier.POOR].adverseMediaAllowed) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.POOR,
+        passed: true,
+        reason: "Adverse media hit detected - only POOR tier allows this",
+        actualValue: {
+          hasAdverseMediaHit: true,
+          totalHits: context.kycProtect.totalHits,
+        },
+        expectedValue: "Only allowed for POOR tier",
+      };
+    }
+
+    return {
+      ruleId: this.id,
+      category: this.category,
+      tier: Tier.REJECTED,
+      passed: false,
+      reason: "Adverse media hit - not allowed",
+      actualValue: {
+        hasAdverseMediaHit: true,
+        totalHits: context.kycProtect.totalHits,
+      },
+      expectedValue: false,
+    };
+  },
+};
