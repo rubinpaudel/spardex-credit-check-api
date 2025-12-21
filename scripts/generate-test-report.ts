@@ -75,6 +75,7 @@ interface TestUser {
       yearsAgo: number;
     }>;
     fraudScore: number | null;
+    hasFinancialDisclosure: boolean;
   };
 }
 
@@ -97,6 +98,11 @@ function buildCreditsafeData(user: TestUser): CreditsafeData {
     Date.now() - mock.companyAgeYears * 365.25 * 24 * 60 * 60 * 1000
   ).toISOString();
 
+  // Calculate director appointment date (5 years ago for all test users)
+  const directorAppointmentDate = new Date(
+    Date.now() - 5 * 365.25 * 24 * 60 * 60 * 1000
+  ).toISOString().split("T")[0];
+
   return {
     companyName: user.company.name,
     vatNumber: user.company.vatNumber,
@@ -112,7 +118,18 @@ function buildCreditsafeData(user: TestUser): CreditsafeData {
     creditLimit: null,
     fraudScore: mock.fraudScore,
     fraudDescription: mock.fraudScore !== null ? "Test fraud score" : null,
-    directors: [],
+    directors: [
+      {
+        id: "director-1",
+        name: `${user.questionnaire.contact.firstName} ${user.questionnaire.contact.lastName}`,
+        firstName: user.questionnaire.contact.firstName,
+        lastName: user.questionnaire.contact.lastName,
+        dateOfBirth: user.questionnaire.contact.dateOfBirth,
+        type: "Director",
+        dateAppointed: directorAppointmentDate,
+        appointedYearsAgo: 5,
+      },
+    ],
     bankruptcies: mock.bankruptcies.map((b) => ({
       type: b.type,
       date: b.date,
@@ -122,6 +139,7 @@ function buildCreditsafeData(user: TestUser): CreditsafeData {
     totalBankruptcies: mock.bankruptcies.length,
     hasCCJs: false,
     ccjCount: 0,
+    hasFinancialDisclosure: mock.hasFinancialDisclosure,
   };
 }
 
@@ -137,8 +155,10 @@ function buildRuleContext(user: TestUser): RuleContext {
       companyAddress: "Test Address, Belgium",
       apiCallFailed: false,
     },
+    kycProtect: null,
     creditsafeFailed: false,
     viesFailed: false,
+    kycProtectFailed: false,
   };
 }
 
@@ -179,7 +199,7 @@ function generateExcelReport() {
   for (const user of testUsers) {
     console.log(`Processing ${user.id}...`);
     const evaluation = evaluateUser(user);
-    const expectedTier = user.expectedTier.toUpperCase();
+    const expectedTier = user.expectedTier.toUpperCase().replace("_", " ");
     const passed = evaluation.tierName === expectedTier;
 
     // Create sheet data with simple columns

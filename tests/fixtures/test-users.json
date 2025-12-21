@@ -54,7 +54,8 @@
         "isActive": true,
         "companyStatus": "Active",
         "bankruptcies": [],
-        "fraudScore": null
+        "fraudScore": null,
+        "hasFinancialDisclosure": true
       }
     },
     {
@@ -111,7 +112,8 @@
         "isActive": true,
         "companyStatus": "Active",
         "bankruptcies": [],
-        "fraudScore": 15
+        "fraudScore": 15,
+        "hasFinancialDisclosure": true
       }
     },
     {
@@ -170,7 +172,8 @@
         "bankruptcies": [
           { "type": "bankruptcy", "date": "2019-06-01", "status": "closed", "yearsAgo": 5.5 }
         ],
-        "fraudScore": 35
+        "fraudScore": 35,
+        "hasFinancialDisclosure": true
       }
     },
     {
@@ -227,7 +230,8 @@
         "isActive": true,
         "companyStatus": "Active",
         "bankruptcies": [],
-        "fraudScore": 25
+        "fraudScore": 25,
+        "hasFinancialDisclosure": true
       }
     },
     {
@@ -287,7 +291,8 @@
           { "type": "bankruptcy", "date": "2021-03-15", "status": "closed", "yearsAgo": 3.7 },
           { "type": "bankruptcy", "date": "2022-09-01", "status": "closed", "yearsAgo": 2.3 }
         ],
-        "fraudScore": 45
+        "fraudScore": 45,
+        "hasFinancialDisclosure": false
       }
     },
     {
@@ -344,7 +349,8 @@
         "isActive": true,
         "companyStatus": "Active",
         "bankruptcies": [],
-        "fraudScore": 55
+        "fraudScore": 55,
+        "hasFinancialDisclosure": false
       }
     },
     {
@@ -405,7 +411,8 @@
           { "type": "bankruptcy", "date": "2022-08-01", "status": "closed", "yearsAgo": 2.4 },
           { "type": "bankruptcy", "date": "2023-03-01", "status": "closed", "yearsAgo": 1.8 }
         ],
-        "fraudScore": 60
+        "fraudScore": 60,
+        "hasFinancialDisclosure": false
       }
     },
     {
@@ -462,7 +469,8 @@
         "isActive": true,
         "companyStatus": "Active",
         "bankruptcies": [],
-        "fraudScore": 65
+        "fraudScore": 65,
+        "hasFinancialDisclosure": false
       }
     },
     {
@@ -524,7 +532,8 @@
           { "type": "bankruptcy", "date": "2022-06-01", "status": "open", "yearsAgo": 2.5 },
           { "type": "bankruptcy", "date": "2023-01-01", "status": "open", "yearsAgo": 2.0 }
         ],
-        "fraudScore": 85
+        "fraudScore": 85,
+        "hasFinancialDisclosure": false
       },
       "mockKycProtectResponse": {
         "hasSanctionHit": false,
@@ -588,7 +597,8 @@
         "isActive": true,
         "companyStatus": "Active",
         "bankruptcies": [],
-        "fraudScore": null
+        "fraudScore": null,
+        "hasFinancialDisclosure": true
       }
     },
     {
@@ -645,7 +655,8 @@
         "isActive": true,
         "companyStatus": "Active",
         "bankruptcies": [],
-        "fraudScore": null
+        "fraudScore": null,
+        "hasFinancialDisclosure": true
       }
     },
     {
@@ -702,7 +713,8 @@
         "isActive": true,
         "companyStatus": "Active",
         "bankruptcies": [],
-        "fraudScore": 20
+        "fraudScore": 20,
+        "hasFinancialDisclosure": true
       }
     }
   ]

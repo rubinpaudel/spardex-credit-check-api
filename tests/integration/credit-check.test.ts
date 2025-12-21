@@ -43,6 +43,7 @@ interface TestUser {
       yearsAgo: number;
     }>;
     fraudScore: number | null;
+    hasFinancialDisclosure: boolean;
   };
   mockKycProtectResponse?: {
     hasSanctionHit: boolean;
@@ -158,15 +159,17 @@ describe("Credit Check Integration Tests", () => {
               numberOfPossible: 0,
             },
           },
-          financialStatements: [
-            {
-              type: "Annual",
-              yearEndDate: "2023-12-31",
-              numberOfWeeks: 52,
-              currency: "EUR",
-              consolidatedAccounts: false,
-            },
-          ],
+          financialStatements: user.mockCreditsafeResponse.hasFinancialDisclosure
+            ? [
+                {
+                  type: "Annual",
+                  yearEndDate: "2023-12-31",
+                  numberOfWeeks: 52,
+                  currency: "EUR",
+                  consolidatedAccounts: false,
+                },
+              ]
+            : [],
         },
       };
 
