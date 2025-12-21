@@ -39,16 +39,5 @@ export const creditCheckSchema = t.Object({
     withholdingObligation: t.Object({
       selfDeclaredDebt: t.Boolean(),
     }),
-    // TEMPORARY: Mock data until Creditsafe integration
-    _mock: t.Optional(
-      t.Object({
-        creditRating: t.Optional(t.Number({ minimum: 0, maximum: 100 })),
-        fraudScore: t.Optional(t.Number({ minimum: 0, maximum: 100 })),
-        companyAgeYears: t.Optional(t.Number({ minimum: 0 })),
-        adminBankruptcies: t.Optional(t.Number({ minimum: 0 })),
-        sanctionListHit: t.Optional(t.Boolean()),
-        blocklistHit: t.Optional(t.Boolean()),
-      })
-    ),
   }),
 });

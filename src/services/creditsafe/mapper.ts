@@ -49,6 +49,7 @@ export interface CreditsafeData {
   // Flags
   hasCCJs: boolean; // County Court Judgments
   ccjCount: number;
+  hasFinancialDisclosure: boolean; // Has filed financial statements
 
   // Raw report for debugging
   _raw?: CreditsafeCompanyReport;
@@ -207,6 +208,13 @@ export function mapCreditsafeResponse(
 
     hasCCJs: (r.negativeInformation?.ccjSummary?.numberOfExact ?? 0) > 0,
     ccjCount: r.negativeInformation?.ccjSummary?.numberOfExact ?? 0,
+
+    // Financial disclosure check - has filed if:
+    // 1. Has financial statements, OR
+    // 2. Has shareholders equity figure in summary
+    hasFinancialDisclosure:
+      (r.financialStatements && r.financialStatements.length > 0) ||
+      summary.latestShareholdersEquityFigure !== undefined,
 
     _raw: includeRaw ? report : undefined,
   };

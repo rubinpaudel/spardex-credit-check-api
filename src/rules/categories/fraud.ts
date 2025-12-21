@@ -79,6 +79,8 @@ export const fraudScoreRule: Rule = {
 /**
  * Rule: Sanction list hit.
  *
+ * Checks for sanctions hits from KYC Protect (OFAC, EU, UN, etc.).
+ *
  * - No hit → EXCELLENT (doesn't restrict)
  * - Hit → MANUAL_REVIEW (Poor tier allows with manual review)
  */
@@ -87,16 +89,45 @@ export const sanctionListRule: Rule = {
   category: "fraud",
 
   evaluate(context: RuleContext): RuleResult {
-    const hasHit = context.questionnaire._mock?.sanctionListHit ?? false;
+    // If KYC Protect failed, we can't verify - trigger manual review
+    if (context.kycProtectFailed) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.MANUAL_REVIEW,
+        passed: false,
+        reason: "KYC Protect check unavailable - manual review required",
+        actualValue: null,
+        expectedValue: "No sanction hits",
+      };
+    }
 
-    if (!hasHit) {
+    // If no KYC data available (e.g., no company name), default to no hit
+    if (!context.kycProtect) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.EXCELLENT,
+        passed: true,
+        reason: "KYC screening not performed - no sanction check",
+        actualValue: false,
+        expectedValue: false,
+      };
+    }
+
+    const hasSanctionHit = context.kycProtect.hasSanctionHit;
+
+    if (!hasSanctionHit) {
       return {
         ruleId: this.id,
         category: this.category,
         tier: Tier.EXCELLENT,
         passed: true,
         reason: "No sanction list hit",
-        actualValue: hasHit,
+        actualValue: {
+          hasSanctionHit: false,
+          totalHits: context.kycProtect.totalHits,
+        },
         expectedValue: false,
       };
     }
@@ -109,7 +140,10 @@ export const sanctionListRule: Rule = {
         tier: Tier.MANUAL_REVIEW,
         passed: true,
         reason: "Sanction list hit detected - requires manual review",
-        actualValue: hasHit,
+        actualValue: {
+          hasSanctionHit: true,
+          totalHits: context.kycProtect.totalHits,
+        },
         expectedValue: "No hit, or manual review if hit",
       };
     }
@@ -120,7 +154,10 @@ export const sanctionListRule: Rule = {
       tier: Tier.REJECTED,
       passed: false,
       reason: "Sanction list hit - not allowed",
-      actualValue: hasHit,
+      actualValue: {
+        hasSanctionHit: true,
+        totalHits: context.kycProtect.totalHits,
+      },
       expectedValue: false,
     };
   },

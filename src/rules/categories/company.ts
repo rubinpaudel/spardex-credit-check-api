@@ -316,3 +316,108 @@ export const companyActiveRule: Rule = {
     };
   },
 };
+
+/**
+ * Rule: Financial disclosure requirement.
+ *
+ * Checks if the company has filed financial statements (from Creditsafe).
+ *
+ * - Has disclosure → EXCELLENT (qualifies for all tiers)
+ * - No disclosure → FAIR (Excellent/Good require disclosure, Fair/Poor don't)
+ *
+ * Note: This doesn't cause rejection, just limits to Fair/Poor tiers.
+ */
+export const financialDisclosureRule: Rule = {
+  id: "financial-disclosure",
+  category: "company",
+
+  evaluate(context: RuleContext): RuleResult {
+    // If no Creditsafe data, we can't verify disclosure
+    if (!context.creditsafe) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.MANUAL_REVIEW,
+        passed: false,
+        reason: "Creditsafe data unavailable - cannot verify financial disclosure",
+        actualValue: null,
+        expectedValue: "Financial disclosure check required",
+      };
+    }
+
+    const hasDisclosure = context.creditsafe.hasFinancialDisclosure;
+
+    // If has financial disclosure, qualifies for all tiers
+    if (hasDisclosure) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.EXCELLENT,
+        passed: true,
+        reason: "Company has filed financial statements",
+        actualValue: {
+          hasFinancialDisclosure: true,
+        },
+        expectedValue: {
+          excellent: "Required",
+          good: "Required",
+          fair: "Not required",
+          poor: "Not required",
+        },
+      };
+    }
+
+    // No disclosure - check if Fair tier allows it
+    if (!tierThresholds[Tier.FAIR].requiresFinancialDisclosure) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.FAIR,
+        passed: true,
+        reason: "No financial statements on file - qualifies for Fair/Poor tiers only",
+        actualValue: {
+          hasFinancialDisclosure: false,
+        },
+        expectedValue: {
+          excellent: "Required",
+          good: "Required",
+          fair: "Not required",
+          poor: "Not required",
+        },
+      };
+    }
+
+    // If Fair also requires it, check Poor
+    if (!tierThresholds[Tier.POOR].requiresFinancialDisclosure) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.POOR,
+        passed: true,
+        reason: "No financial statements on file - qualifies for Poor tier only",
+        actualValue: {
+          hasFinancialDisclosure: false,
+        },
+        expectedValue: {
+          excellent: "Required",
+          good: "Required",
+          fair: "Required",
+          poor: "Not required",
+        },
+      };
+    }
+
+    // All tiers require disclosure
+    return {
+      ruleId: this.id,
+      category: this.category,
+      tier: Tier.REJECTED,
+      passed: false,
+      reason: "Financial disclosure required but not filed",
+      actualValue: {
+        hasFinancialDisclosure: false,
+      },
+      expectedValue: "Financial disclosure required for all tiers",
+    };
+  },
+};

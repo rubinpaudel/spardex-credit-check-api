@@ -2,6 +2,7 @@ import { Tier } from "./tiers";
 import { QuestionnaireData, CompanyInfo } from "./request";
 import { TierThresholds } from "../config/tier-config";
 import { CreditsafeData } from "../services/creditsafe/mapper";
+import { KycProtectData } from "../services/kyc-protect/types";
 
 // Categories of rules
 export type RuleCategory =
@@ -42,10 +43,12 @@ export interface RuleContext {
   // External data sources
   creditsafe: CreditsafeData | null;
   vies?: ViesData;
+  kycProtect: KycProtectData | null;
 
   // Flags for API failures
   creditsafeFailed: boolean;
   viesFailed: boolean;
+  kycProtectFailed: boolean;
 }
 
 // A rule that can be evaluated

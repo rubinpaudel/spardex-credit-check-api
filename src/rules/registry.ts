@@ -15,8 +15,12 @@ import {
   withholdingObligationRule,
   vatValidRule,
   companyActiveRule,
+  financialDisclosureRule,
 } from "./categories/company";
-import { adminBankruptciesRule } from "./categories/admin";
+import {
+  adminBankruptciesRule,
+  adminTrackRecordRule,
+} from "./categories/admin";
 import { fraudScoreRule, sanctionListRule } from "./categories/fraud";
 import { legalFormRule } from "./categories/legal-status";
 import { blocklistRule } from "./categories/blocklist";
@@ -52,8 +56,10 @@ export const allRules: Rule[] = [
   creditRatingRule,
   companyAgeRule,
   withholdingObligationRule,
+  financialDisclosureRule,
   // Admin rules
   adminBankruptciesRule,
+  adminTrackRecordRule,
   // Fraud rules
   fraudScoreRule,
   sanctionListRule,

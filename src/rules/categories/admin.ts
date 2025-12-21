@@ -1,7 +1,10 @@
 import { Rule, RuleResult, RuleContext } from "../../types/rules";
 import { Tier } from "../../types/tiers";
 import { tierThresholds } from "../../config/tier-config";
-import { countBankruptciesInScope } from "../../services/creditsafe/mapper";
+import {
+  countBankruptciesInScope,
+  findDirectorByName,
+} from "../../services/creditsafe/mapper";
 
 /**
  * Rule: Administrator bankruptcy count determines tier.
@@ -73,6 +76,104 @@ export const adminBankruptciesRule: Rule = {
       reason: `${countInPoorScope} bankruptcies in last ${poorScope} years exceeds maximum of ${tierThresholds[Tier.POOR].maxAdminBankruptcies}`,
       actualValue: countInPoorScope,
       expectedValue: `<= ${tierThresholds[Tier.POOR].maxAdminBankruptcies}`,
+    };
+  },
+};
+
+/**
+ * Rule: Administrator track record years determines tier.
+ *
+ * Matches contact to company director and checks how long they've been appointed.
+ *
+ * Thresholds (minimum years as admin at current company):
+ * - EXCELLENT: 3 years
+ * - GOOD: 3 years
+ * - FAIR: 3 years
+ * - POOR: 0.5 years (6 months)
+ *
+ * If contact cannot be matched to a director → MANUAL_REVIEW
+ */
+export const adminTrackRecordRule: Rule = {
+  id: "admin-track-record",
+  category: "admin",
+
+  evaluate(context: RuleContext): RuleResult {
+    // If no Creditsafe data, we can't verify track record
+    if (!context.creditsafe) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.MANUAL_REVIEW,
+        passed: false,
+        reason: "Creditsafe data unavailable - cannot verify admin track record",
+        actualValue: null,
+        expectedValue: "Admin track record check required",
+      };
+    }
+
+    const { firstName, lastName } = context.questionnaire.contact;
+    const director = findDirectorByName(
+      context.creditsafe.directors,
+      firstName,
+      lastName
+    );
+
+    // If contact is not found in directors, require manual review
+    if (!director) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.MANUAL_REVIEW,
+        passed: false,
+        reason: `Contact "${firstName} ${lastName}" not found in company directors`,
+        actualValue: {
+          searchedName: `${firstName} ${lastName}`,
+          availableDirectors: context.creditsafe.directors.map((d) => d.name),
+        },
+        expectedValue: "Contact must be a company director",
+      };
+    }
+
+    const yearsAsAdmin = director.appointedYearsAgo;
+    const tiers = [Tier.EXCELLENT, Tier.GOOD, Tier.FAIR, Tier.POOR] as const;
+
+    for (const tier of tiers) {
+      const minRequired = tierThresholds[tier].minAdminTrackRecordYears;
+      if (yearsAsAdmin >= minRequired) {
+        return {
+          ruleId: this.id,
+          category: this.category,
+          tier,
+          passed: true,
+          reason: `Admin track record ${yearsAsAdmin.toFixed(1)} years meets ${tier} requirement (>= ${minRequired} years)`,
+          actualValue: {
+            directorName: director.name,
+            yearsAsAdmin: yearsAsAdmin,
+            dateAppointed: director.dateAppointed,
+          },
+          expectedValue: {
+            excellent: `>= ${tierThresholds[Tier.EXCELLENT].minAdminTrackRecordYears} years`,
+            good: `>= ${tierThresholds[Tier.GOOD].minAdminTrackRecordYears} years`,
+            fair: `>= ${tierThresholds[Tier.FAIR].minAdminTrackRecordYears} years`,
+            poor: `>= ${tierThresholds[Tier.POOR].minAdminTrackRecordYears} years`,
+          },
+        };
+      }
+    }
+
+    // Doesn't meet even Poor tier requirement
+    return {
+      ruleId: this.id,
+      category: this.category,
+      tier: Tier.REJECTED,
+      passed: false,
+      reason: `Admin track record ${yearsAsAdmin.toFixed(1)} years is below minimum of ${tierThresholds[Tier.POOR].minAdminTrackRecordYears} years`,
+      actualValue: {
+        directorName: director.name,
+        yearsAsAdmin: yearsAsAdmin,
+        dateAppointed: director.dateAppointed,
+      },
+      expectedValue: `>= ${tierThresholds[Tier.POOR].minAdminTrackRecordYears} years`,
     };
   },
 };

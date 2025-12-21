@@ -2,28 +2,58 @@ import { Rule, RuleResult, RuleContext } from "../../types/rules";
 import { Tier } from "../../types/tiers";
 
 /**
- * Rule: Blocklist hit.
+ * Rule: Blocklist/Enforcement hit.
  *
- * This is a HARD REJECTION - no tier allows blocklist hits.
+ * Checks for enforcement or regulatory action hits from KYC Protect.
+ * This is a HARD REJECTION - no tier allows enforcement hits.
  *
  * - No hit → EXCELLENT (doesn't restrict)
- * - Hit → REJECTED (always)
+ * - Enforcement hit → REJECTED (always)
  */
 export const blocklistRule: Rule = {
   id: "blocklist",
   category: "blocklist",
 
   evaluate(context: RuleContext): RuleResult {
-    const hasHit = context.questionnaire._mock?.blocklistHit ?? false;
+    // If KYC Protect failed, we can't verify - trigger manual review
+    if (context.kycProtectFailed) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.MANUAL_REVIEW,
+        passed: false,
+        reason: "KYC Protect check unavailable - manual review required",
+        actualValue: null,
+        expectedValue: "No enforcement hits",
+      };
+    }
 
-    if (hasHit) {
+    // If no KYC data available (e.g., no company name), default to no hit
+    if (!context.kycProtect) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.EXCELLENT,
+        passed: true,
+        reason: "KYC screening not performed - no enforcement check",
+        actualValue: false,
+        expectedValue: false,
+      };
+    }
+
+    const hasEnforcementHit = context.kycProtect.hasEnforcementHit;
+
+    if (hasEnforcementHit) {
       return {
         ruleId: this.id,
         category: this.category,
         tier: Tier.REJECTED,
         passed: false,
-        reason: "Blocklist hit - application rejected",
-        actualValue: hasHit,
+        reason: "Enforcement/regulatory hit detected - application rejected",
+        actualValue: {
+          hasEnforcementHit: true,
+          totalHits: context.kycProtect.totalHits,
+        },
         expectedValue: false,
       };
     }
@@ -33,8 +63,11 @@ export const blocklistRule: Rule = {
       category: this.category,
       tier: Tier.EXCELLENT,
       passed: true,
-      reason: "No blocklist hit",
-      actualValue: hasHit,
+      reason: "No enforcement/regulatory hits",
+      actualValue: {
+        hasEnforcementHit: false,
+        totalHits: context.kycProtect.totalHits,
+      },
       expectedValue: false,
     };
   },

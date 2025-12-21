@@ -138,6 +138,24 @@ export interface CreditsafeCompanyReport {
       companyName: string;
       relationshipType: string;
     }>;
+    financialStatements?: Array<{
+      type: string;
+      yearEndDate: string;
+      numberOfWeeks: number;
+      currency: string;
+      consolidatedAccounts: boolean;
+      profitAndLoss?: {
+        revenue?: number;
+        operatingProfit?: number;
+        profitBeforeTax?: number;
+        profitAfterTax?: number;
+      };
+      balanceSheet?: {
+        totalAssets?: number;
+        totalLiabilities?: number;
+        totalShareholdersEquity?: number;
+      };
+    }>;
   };
 }
 
