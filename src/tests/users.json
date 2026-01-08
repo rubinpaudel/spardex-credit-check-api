@@ -14,8 +14,7 @@
             "nationality": "BE",
             "belgiumResident": true,
             "isAdministrator": true,
-            "driversLicenseSinceYears": 25,
-            "adminTrackRecordYearsBelgium": 12
+            "driversLicenseSinceYears": 25
           },
           "legalHistory": {
             "contactWithLegalAuthorities": false,
@@ -187,8 +186,7 @@
             "nationality": "BE",
             "belgiumResident": true,
             "isAdministrator": true,
-            "driversLicenseSinceYears": 35,
-            "adminTrackRecordYearsBelgium": 20
+            "driversLicenseSinceYears": 35
           },
           "legalHistory": {
             "contactWithLegalAuthorities": false,
@@ -354,8 +352,7 @@
             "nationality": "BE",
             "belgiumResident": true,
             "isAdministrator": true,
-            "driversLicenseSinceYears": 20,
-            "adminTrackRecordYearsBelgium": 8
+            "driversLicenseSinceYears": 20
           },
           "legalHistory": {
             "contactWithLegalAuthorities": false,
@@ -527,8 +524,7 @@
             "nationality": "BE",
             "belgiumResident": true,
             "isAdministrator": true,
-            "driversLicenseSinceYears": 24,
-            "adminTrackRecordYearsBelgium": 6
+            "driversLicenseSinceYears": 24
           },
           "legalHistory": {
             "contactWithLegalAuthorities": false,
@@ -687,8 +683,7 @@
             "nationality": "BE",
             "belgiumResident": true,
             "isAdministrator": true,
-            "driversLicenseSinceYears": 18,
-            "adminTrackRecordYearsBelgium": 5
+            "driversLicenseSinceYears": 18
           },
           "legalHistory": {
             "contactWithLegalAuthorities": false,
@@ -845,8 +840,7 @@
             "nationality": "BE",
             "belgiumResident": true,
             "isAdministrator": true,
-            "driversLicenseSinceYears": 12,
-            "adminTrackRecordYearsBelgium": 4
+            "driversLicenseSinceYears": 12
           },
           "legalHistory": {
             "contactWithLegalAuthorities": false,
@@ -991,8 +985,7 @@
             "nationality": "BE",
             "belgiumResident": true,
             "isAdministrator": true,
-            "driversLicenseSinceYears": 30,
-            "adminTrackRecordYearsBelgium": 1
+            "driversLicenseSinceYears": 30
           },
           "legalHistory": {
             "contactWithLegalAuthorities": false,
@@ -1166,8 +1159,7 @@
             "nationality": "BE",
             "belgiumResident": true,
             "isAdministrator": true,
-            "driversLicenseSinceYears": 38,
-            "adminTrackRecordYearsBelgium": 2
+            "driversLicenseSinceYears": 38
           },
           "legalHistory": {
             "contactWithLegalAuthorities": false,
@@ -1321,8 +1313,7 @@
             "nationality": "BE",
             "belgiumResident": true,
             "isAdministrator": true,
-            "driversLicenseSinceYears": 22,
-            "adminTrackRecordYearsBelgium": 0.3
+            "driversLicenseSinceYears": 22
           },
           "legalHistory": {
             "contactWithLegalAuthorities": true,
@@ -1480,8 +1471,7 @@
             "nationality": "DE",
             "belgiumResident": false,
             "isAdministrator": false,
-            "driversLicenseSinceYears": 0,
-            "adminTrackRecordYearsBelgium": 0
+            "driversLicenseSinceYears": 0
           },
           "legalHistory": {
             "contactWithLegalAuthorities": true,

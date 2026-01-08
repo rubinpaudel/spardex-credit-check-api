@@ -36,7 +36,6 @@ interface TestUser {
       belgiumResident: boolean;
       isAdministrator: boolean;
       driversLicenseSinceYears: number;
-      adminTrackRecordYearsBelgium: number;
     };
     legalHistory: {
       contactWithLegalAuthorities: boolean;

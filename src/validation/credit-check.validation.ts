@@ -15,7 +15,6 @@ export const creditCheckSchema = t.Object({
       belgiumResident: t.Boolean(),
       isAdministrator: t.Boolean(),
       driversLicenseSinceYears: t.Number({ minimum: 0 }),
-      adminTrackRecordYearsBelgium: t.Number({ minimum: 0 }),
     }),
     legalHistory: t.Object({
       contactWithLegalAuthorities: t.Boolean(),

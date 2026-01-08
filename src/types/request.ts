@@ -9,7 +9,6 @@ export interface ContactInfo {
   belgiumResident: boolean;
   isAdministrator: boolean;
   driversLicenseSinceYears: number; // How many years they've had license
-  adminTrackRecordYearsBelgium: number;
 }
 
 // Legal/compliance history

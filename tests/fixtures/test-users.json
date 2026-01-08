@@ -19,8 +19,7 @@
           "nationality": "BE",
           "belgiumResident": true,
           "isAdministrator": true,
-          "driversLicenseSinceYears": 20,
-          "adminTrackRecordYearsBelgium": 10
+          "driversLicenseSinceYears": 20
         },
         "legalHistory": {
           "contactWithLegalAuthorities": false,
@@ -77,8 +76,7 @@
           "nationality": "BE",
           "belgiumResident": true,
           "isAdministrator": true,
-          "driversLicenseSinceYears": 25,
-          "adminTrackRecordYearsBelgium": 15
+          "driversLicenseSinceYears": 25
         },
         "legalHistory": {
           "contactWithLegalAuthorities": false,
@@ -135,8 +133,7 @@
           "nationality": "BE",
           "belgiumResident": true,
           "isAdministrator": true,
-          "driversLicenseSinceYears": 15,
-          "adminTrackRecordYearsBelgium": 8
+          "driversLicenseSinceYears": 15
         },
         "legalHistory": {
           "contactWithLegalAuthorities": false,
@@ -195,8 +192,7 @@
           "nationality": "BE",
           "belgiumResident": true,
           "isAdministrator": true,
-          "driversLicenseSinceYears": 20,
-          "adminTrackRecordYearsBelgium": 10
+          "driversLicenseSinceYears": 20
         },
         "legalHistory": {
           "contactWithLegalAuthorities": false,
@@ -253,8 +249,7 @@
           "nationality": "BE",
           "belgiumResident": true,
           "isAdministrator": true,
-          "driversLicenseSinceYears": 18,
-          "adminTrackRecordYearsBelgium": 6
+          "driversLicenseSinceYears": 18
         },
         "legalHistory": {
           "contactWithLegalAuthorities": false,
@@ -314,8 +309,7 @@
           "nationality": "BE",
           "belgiumResident": true,
           "isAdministrator": true,
-          "driversLicenseSinceYears": 22,
-          "adminTrackRecordYearsBelgium": 7
+          "driversLicenseSinceYears": 22
         },
         "legalHistory": {
           "contactWithLegalAuthorities": false,
@@ -372,8 +366,7 @@
           "nationality": "BE",
           "belgiumResident": true,
           "isAdministrator": true,
-          "driversLicenseSinceYears": 25,
-          "adminTrackRecordYearsBelgium": 5
+          "driversLicenseSinceYears": 25
         },
         "legalHistory": {
           "contactWithLegalAuthorities": false,
@@ -434,8 +427,7 @@
           "nationality": "BE",
           "belgiumResident": true,
           "isAdministrator": true,
-          "driversLicenseSinceYears": 17,
-          "adminTrackRecordYearsBelgium": 4
+          "driversLicenseSinceYears": 17
         },
         "legalHistory": {
           "contactWithLegalAuthorities": false,
@@ -492,8 +484,7 @@
           "nationality": "BE",
           "belgiumResident": true,
           "isAdministrator": true,
-          "driversLicenseSinceYears": 30,
-          "adminTrackRecordYearsBelgium": 15
+          "driversLicenseSinceYears": 30
         },
         "legalHistory": {
           "contactWithLegalAuthorities": true,
@@ -562,8 +553,7 @@
           "nationality": "NL",
           "belgiumResident": false,
           "isAdministrator": false,
-          "driversLicenseSinceYears": 0,
-          "adminTrackRecordYearsBelgium": 0
+          "driversLicenseSinceYears": 0
         },
         "legalHistory": {
           "contactWithLegalAuthorities": false,
@@ -620,8 +610,7 @@
           "nationality": "BE",
           "belgiumResident": true,
           "isAdministrator": true,
-          "driversLicenseSinceYears": 20,
-          "adminTrackRecordYearsBelgium": 10
+          "driversLicenseSinceYears": 20
         },
         "legalHistory": {
           "contactWithLegalAuthorities": true,
@@ -678,8 +667,7 @@
           "nationality": "BE",
           "belgiumResident": true,
           "isAdministrator": true,
-          "driversLicenseSinceYears": 22,
-          "adminTrackRecordYearsBelgium": 12
+          "driversLicenseSinceYears": 22
         },
         "legalHistory": {
           "contactWithLegalAuthorities": false,
