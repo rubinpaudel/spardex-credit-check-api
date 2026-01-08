@@ -12,6 +12,7 @@ import { RuleContext, RuleResult } from "../src/types/rules";
 import { allRules } from "../src/rules/registry";
 import { evaluateAllRules, aggregateResults } from "../src/rules/engine";
 import { CreditsafeData } from "../src/services/creditsafe/mapper";
+import { KycProtectData } from "../src/services/kyc-protect/types";
 import { getFinancialTerms } from "../src/config/tier-config";
 import { QuestionnaireData } from "../src/types/request";
 
@@ -76,6 +77,13 @@ interface TestUser {
     }>;
     fraudScore: number | null;
     hasFinancialDisclosure: boolean;
+  };
+  mockKycProtectResponse?: {
+    hasSanctionHit: boolean;
+    hasEnforcementHit: boolean;
+    hasPepHit: boolean;
+    hasAdverseMediaHit: boolean;
+    totalHits: number;
   };
 }
 
@@ -143,6 +151,35 @@ function buildCreditsafeData(user: TestUser): CreditsafeData {
   };
 }
 
+// Build KycProtectData from test user mock response
+function buildKycProtectData(user: TestUser): KycProtectData | null {
+  const mock = user.mockKycProtectResponse;
+  if (!mock) {
+    // Default: no hits (clean screening)
+    return {
+      searchId: "test-search-id",
+      companyName: user.company.name,
+      hasSanctionHit: false,
+      hasEnforcementHit: false,
+      hasPepHit: false,
+      hasAdverseMediaHit: false,
+      totalHits: 0,
+      hits: [],
+    };
+  }
+
+  return {
+    searchId: "test-search-id",
+    companyName: user.company.name,
+    hasSanctionHit: mock.hasSanctionHit,
+    hasEnforcementHit: mock.hasEnforcementHit,
+    hasPepHit: mock.hasPepHit,
+    hasAdverseMediaHit: mock.hasAdverseMediaHit,
+    totalHits: mock.totalHits,
+    hits: [], // Empty hits array for simplicity
+  };
+}
+
 // Build RuleContext from test user
 function buildRuleContext(user: TestUser): RuleContext {
   return {
@@ -155,7 +192,7 @@ function buildRuleContext(user: TestUser): RuleContext {
       companyAddress: "Test Address, Belgium",
       apiCallFailed: false,
     },
-    kycProtect: null,
+    kycProtect: buildKycProtectData(user),
     creditsafeFailed: false,
     viesFailed: false,
     kycProtectFailed: false,
