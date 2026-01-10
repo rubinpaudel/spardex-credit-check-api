@@ -52,7 +52,7 @@ export const creditCheckRoutes = new Elysia({ prefix: "/api/v1" }).post(
       timestamp,
     };
 
-    // Log request and response to file for debugging
+    // Log request and response
     logger.info({
       type: "credit-check",
       requestId,
@@ -60,36 +60,7 @@ export const creditCheckRoutes = new Elysia({ prefix: "/api/v1" }).post(
         vatNumber: body.company.vatNumber,
         contact: `${body.questionnaire.contact.firstName} ${body.questionnaire.contact.lastName}`,
       },
-      response: {
-        tier: response.result.tier,
-        requiresManualReview: response.result.requiresManualReview,
-        ruleResults: response.result.ruleResults.map((r) => ({
-          ruleId: r.ruleId,
-          tier: r.tier,
-          passed: r.passed,
-          reason: r.reason,
-        })),
-      },
-      enrichedData: {
-        creditsafe: enrichment.creditsafe
-          ? {
-              companyName: enrichment.creditsafe.companyName,
-              creditRating: enrichment.creditsafe.creditRating,
-              isActive: enrichment.creditsafe.isActive,
-              hasFinancialDisclosure: enrichment.creditsafe.hasFinancialDisclosure,
-            }
-          : null,
-        vies: enrichment.vies,
-        kycProtect: enrichment.kycProtect
-          ? {
-              hasSanctionHit: enrichment.kycProtect.hasSanctionHit,
-              hasEnforcementHit: enrichment.kycProtect.hasEnforcementHit,
-              hasAdverseMediaHit: enrichment.kycProtect.hasAdverseMediaHit,
-              totalHits: enrichment.kycProtect.totalHits,
-            }
-          : null,
-        errors: enrichment.errors,
-      },
+      response,
     });
 
     return response;
