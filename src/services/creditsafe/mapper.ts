@@ -118,6 +118,7 @@ function normalizeLegalForm(description: string): string {
     EENMANSZAAK: "Eenmanszaak",
     "ENTREPRISE INDIVIDUELLE": "Eenmanszaak",
     "SOLE PROPRIETORSHIP": "Eenmanszaak",
+    "PHYSICAL PERSON": "Eenmanszaak",
   };
 
   // Try exact match first

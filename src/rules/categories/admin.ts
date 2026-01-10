@@ -134,22 +134,34 @@ export const adminTrackRecordRule: Rule = {
       };
     }
 
-    const yearsAsAdmin = director.appointedYearsAgo;
+    // For Eenmanszaak (sole proprietorship), if dateAppointed is missing,
+    // use company age instead since the owner IS the company
+    let yearsAsAdmin = director.appointedYearsAgo;
+    const isEenmanszaak = context.creditsafe.legalForm === "Eenmanszaak";
+    const usedCompanyAge = isEenmanszaak && !director.dateAppointed;
+
+    if (usedCompanyAge) {
+      yearsAsAdmin = context.creditsafe.companyAgeYears;
+    }
     const tiers = [Tier.EXCELLENT, Tier.GOOD, Tier.FAIR, Tier.POOR] as const;
 
     for (const tier of tiers) {
       const minRequired = tierThresholds[tier].minAdminTrackRecordYears;
       if (yearsAsAdmin >= minRequired) {
+        const reasonPrefix = usedCompanyAge
+          ? `Eenmanszaak company age ${yearsAsAdmin.toFixed(1)} years`
+          : `Admin track record ${yearsAsAdmin.toFixed(1)} years`;
         return {
           ruleId: this.id,
           category: this.category,
           tier,
           passed: true,
-          reason: `Admin track record ${yearsAsAdmin.toFixed(1)} years meets ${tier} requirement (>= ${minRequired} years)`,
+          reason: `${reasonPrefix} meets ${tier} requirement (>= ${minRequired} years)`,
           actualValue: {
             directorName: director.name,
             yearsAsAdmin: yearsAsAdmin,
-            dateAppointed: director.dateAppointed,
+            dateAppointed: director.dateAppointed || null,
+            usedCompanyAge,
           },
           expectedValue: {
             excellent: `>= ${tierThresholds[Tier.EXCELLENT].minAdminTrackRecordYears} years`,
@@ -162,16 +174,20 @@ export const adminTrackRecordRule: Rule = {
     }
 
     // Doesn't meet even Poor tier requirement
+    const reasonPrefix = usedCompanyAge
+      ? `Eenmanszaak company age ${yearsAsAdmin.toFixed(1)} years`
+      : `Admin track record ${yearsAsAdmin.toFixed(1)} years`;
     return {
       ruleId: this.id,
       category: this.category,
       tier: Tier.REJECTED,
       passed: false,
-      reason: `Admin track record ${yearsAsAdmin.toFixed(1)} years is below minimum of ${tierThresholds[Tier.POOR].minAdminTrackRecordYears} years`,
+      reason: `${reasonPrefix} is below minimum of ${tierThresholds[Tier.POOR].minAdminTrackRecordYears} years`,
       actualValue: {
         directorName: director.name,
         yearsAsAdmin: yearsAsAdmin,
-        dateAppointed: director.dateAppointed,
+        dateAppointed: director.dateAppointed || null,
+        usedCompanyAge,
       },
       expectedValue: `>= ${tierThresholds[Tier.POOR].minAdminTrackRecordYears} years`,
     };
