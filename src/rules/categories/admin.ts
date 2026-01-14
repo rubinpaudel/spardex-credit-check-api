@@ -1,10 +1,7 @@
 import { Rule, RuleResult, RuleContext } from "../../types/rules";
 import { Tier } from "../../types/tiers";
 import { tierThresholds } from "../../config/tier-config";
-import {
-  countBankruptciesInScope,
-  findDirectorByName,
-} from "../../services/creditsafe/mapper";
+import { countBankruptciesInScope } from "../../services/creditsafe/mapper";
 
 /**
  * Rule: Administrator bankruptcy count determines tier.
@@ -111,38 +108,35 @@ export const adminTrackRecordRule: Rule = {
       };
     }
 
-    const { firstName, lastName } = context.questionnaire.contact;
-    const director = findDirectorByName(
-      context.creditsafe.directors,
-      firstName,
-      lastName
-    );
-
-    // If contact is not found in directors, require manual review
-    if (!director) {
+    // If no directors at all, we can't evaluate track record
+    if (context.creditsafe.directors.length === 0) {
       return {
         ruleId: this.id,
         category: this.category,
         tier: Tier.MANUAL_REVIEW,
         passed: false,
-        reason: `Contact "${firstName} ${lastName}" not found in company directors`,
-        actualValue: {
-          searchedName: `${firstName} ${lastName}`,
-          availableDirectors: context.creditsafe.directors.map((d) => d.name),
-        },
-        expectedValue: "Contact must be a company director",
+        reason: "No directors found in company data",
+        actualValue: null,
+        expectedValue: "At least one director required",
       };
     }
 
-    // For Eenmanszaak (sole proprietorship), if dateAppointed is missing,
-    // use company age instead since the owner IS the company
-    let yearsAsAdmin = director.appointedYearsAgo;
+    // For Eenmanszaak (sole proprietorship), use company age since the owner IS the company
     const isEenmanszaak = context.creditsafe.legalForm === "Eenmanszaak";
-    const usedCompanyAge = isEenmanszaak && !director.dateAppointed;
+
+    // Find the longest-serving director (best track record)
+    const longestServingDirector = context.creditsafe.directors.reduce(
+      (longest, current) =>
+        current.appointedYearsAgo > longest.appointedYearsAgo ? current : longest
+    );
+
+    let yearsAsAdmin = longestServingDirector.appointedYearsAgo;
+    const usedCompanyAge = isEenmanszaak && !longestServingDirector.dateAppointed;
 
     if (usedCompanyAge) {
       yearsAsAdmin = context.creditsafe.companyAgeYears;
     }
+
     const tiers = [Tier.EXCELLENT, Tier.GOOD, Tier.FAIR, Tier.POOR] as const;
 
     for (const tier of tiers) {
@@ -150,7 +144,7 @@ export const adminTrackRecordRule: Rule = {
       if (yearsAsAdmin >= minRequired) {
         const reasonPrefix = usedCompanyAge
           ? `Eenmanszaak company age ${yearsAsAdmin.toFixed(1)} years`
-          : `Admin track record ${yearsAsAdmin.toFixed(1)} years`;
+          : `Longest admin track record ${yearsAsAdmin.toFixed(1)} years`;
         return {
           ruleId: this.id,
           category: this.category,
@@ -158,9 +152,9 @@ export const adminTrackRecordRule: Rule = {
           passed: true,
           reason: `${reasonPrefix} meets ${tier} requirement (>= ${minRequired} years)`,
           actualValue: {
-            directorName: director.name,
+            directorName: longestServingDirector.name,
             yearsAsAdmin: yearsAsAdmin,
-            dateAppointed: director.dateAppointed || null,
+            dateAppointed: longestServingDirector.dateAppointed || null,
             usedCompanyAge,
           },
           expectedValue: {
@@ -176,7 +170,7 @@ export const adminTrackRecordRule: Rule = {
     // Doesn't meet even Poor tier requirement
     const reasonPrefix = usedCompanyAge
       ? `Eenmanszaak company age ${yearsAsAdmin.toFixed(1)} years`
-      : `Admin track record ${yearsAsAdmin.toFixed(1)} years`;
+      : `Longest admin track record ${yearsAsAdmin.toFixed(1)} years`;
     return {
       ruleId: this.id,
       category: this.category,
@@ -184,9 +178,9 @@ export const adminTrackRecordRule: Rule = {
       passed: false,
       reason: `${reasonPrefix} is below minimum of ${tierThresholds[Tier.POOR].minAdminTrackRecordYears} years`,
       actualValue: {
-        directorName: director.name,
+        directorName: longestServingDirector.name,
         yearsAsAdmin: yearsAsAdmin,
-        dateAppointed: director.dateAppointed || null,
+        dateAppointed: longestServingDirector.dateAppointed || null,
         usedCompanyAge,
       },
       expectedValue: `>= ${tierThresholds[Tier.POOR].minAdminTrackRecordYears} years`,
