@@ -88,6 +88,7 @@ function normalizeLegalForm(description: string): string {
     SA: "NV",
     "NAAMLOZE VENNOOTSCHAP": "NV",
     "SOCIÉTÉ ANONYME": "NV",
+    "PUBLIC LIMITED COMPANY": "NV",
 
     // VOF / SNC
     VOF: "VOF",
