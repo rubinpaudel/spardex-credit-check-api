@@ -2,7 +2,7 @@ const env = {
   PORT: parseInt(process.env.PORT || "3000"),
   NODE_ENV: process.env.NODE_ENV || "development",
   API_KEY: process.env.API_KEY,
-  CORS_ORIGIN: process.env.CORS_ORIGIN,
+  CORS_ORIGINS: process.env.CORS_ORIGINS?.split(",").map((o) => o.trim()) ?? [],
   isProduction: process.env.NODE_ENV === "production",
   isDevelopment: process.env.NODE_ENV !== "production",
 
@@ -17,11 +17,13 @@ const env = {
 } as const;
 
 function validateEnv() {
-  const required = ["API_KEY", "CORS_ORIGIN"] as const;
-  const missing = required.filter((key) => !env[key]);
+  if (!env.API_KEY) {
+    console.error("Missing required environment variable: API_KEY");
+    process.exit(1);
+  }
 
-  if (missing.length > 0) {
-    console.error(`Missing required environment variables: ${missing.join(", ")}`);
+  if (env.CORS_ORIGINS.length === 0) {
+    console.error("Missing required environment variable: CORS_ORIGINS");
     process.exit(1);
   }
 }
