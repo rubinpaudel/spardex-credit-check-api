@@ -48,7 +48,7 @@ export const tierThresholds: Record<
   TierThresholds
 > = {
   [Tier.EXCELLENT]: {
-    creditRatingMin: 90,
+    creditRatingMin: 70, // Was 90, now uses adjusted score with deltas
     minCompanyYears: 5,
     requiresFinancialDisclosure: true,
 
@@ -81,7 +81,7 @@ export const tierThresholds: Record<
   },
 
   [Tier.GOOD]: {
-    creditRatingMin: 70,
+    creditRatingMin: 55, // Was 70, now uses adjusted score with deltas
     minCompanyYears: 3,
     requiresFinancialDisclosure: true,
 
@@ -112,7 +112,7 @@ export const tierThresholds: Record<
   },
 
   [Tier.FAIR]: {
-    creditRatingMin: 50,
+    creditRatingMin: 35, // Was 50, now uses adjusted score with deltas
     minCompanyYears: 2,
     requiresFinancialDisclosure: false,
 
@@ -143,7 +143,7 @@ export const tierThresholds: Record<
   },
 
   [Tier.POOR]: {
-    creditRatingMin: 30,
+    creditRatingMin: 0, // Was 30, now uses adjusted score with deltas
     minCompanyYears: 1,
     requiresFinancialDisclosure: false,
 

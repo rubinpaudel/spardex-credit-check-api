@@ -5,14 +5,15 @@ import { tierThresholds } from "../../config/tier-config";
 /**
  * Rule: Credit rating determines tier.
  *
- * Uses real Creditsafe data. Falls back to MANUAL_REVIEW if unavailable.
+ * Uses adjusted score from score calculation (base Creditsafe score + deltas).
+ * Falls back to MANUAL_REVIEW if unavailable.
  *
- * Thresholds:
- * - >= 90 → EXCELLENT
- * - >= 70 → GOOD
- * - >= 50 → FAIR
- * - >= 30 → POOR
- * - < 30  → REJECTED
+ * Thresholds (with deltas applied):
+ * - >= 70 → EXCELLENT
+ * - >= 55 → GOOD
+ * - >= 35 → FAIR
+ * - >= 0  → POOR
+ * - < 0   → REJECTED (shouldn't happen with clamping)
  */
 export const creditRatingRule: Rule = {
   id: "credit-rating",
@@ -32,22 +33,30 @@ export const creditRatingRule: Rule = {
       };
     }
 
-    const creditRating = context.creditsafe.creditRating;
+    // Use score calculation if available, otherwise fall back to raw score
+    const scoreCalc = context.scoreCalculation;
+    const baseScore = context.creditsafe.creditRating;
+    const adjustedScore = scoreCalc?.adjustedScore ?? baseScore;
+    const isAdjusted = !!scoreCalc;
 
     // Check each tier from best to worst
     const tiers = [Tier.EXCELLENT, Tier.GOOD, Tier.FAIR, Tier.POOR] as const;
 
     for (const tier of tiers) {
       const threshold = tierThresholds[tier].creditRatingMin;
-      if (creditRating >= threshold) {
+      if (adjustedScore >= threshold) {
         return {
           ruleId: this.id,
           category: this.category,
           tier,
           passed: true,
-          reason: `Credit rating ${creditRating} meets ${tier} threshold (>= ${threshold})`,
+          reason: isAdjusted
+            ? `Adjusted score ${adjustedScore} (base: ${baseScore}, delta: ${scoreCalc.totalNumericDelta >= 0 ? "+" : ""}${scoreCalc.totalNumericDelta}) meets ${tierToString(tier)} threshold (>= ${threshold})`
+            : `Credit rating ${adjustedScore} meets ${tierToString(tier)} threshold (>= ${threshold})`,
           actualValue: {
-            creditRating,
+            baseScore,
+            adjustedScore,
+            deltasApplied: scoreCalc?.deltas.map((d) => d.description) ?? [],
             grade: context.creditsafe.creditRatingGrade,
             description: context.creditsafe.creditRatingDescription,
           },
@@ -61,19 +70,124 @@ export const creditRatingRule: Rule = {
       }
     }
 
-    // Below minimum threshold
+    // Below minimum threshold (adjusted score < 0)
     return {
       ruleId: this.id,
       category: this.category,
       tier: Tier.REJECTED,
       passed: false,
-      reason: `Credit rating ${creditRating} is below minimum threshold of ${tierThresholds[Tier.POOR].creditRatingMin}`,
+      reason: isAdjusted
+        ? `Adjusted score ${adjustedScore} (base: ${baseScore}, delta: ${scoreCalc.totalNumericDelta >= 0 ? "+" : ""}${scoreCalc.totalNumericDelta}) is too low`
+        : `Credit rating ${adjustedScore} is too low`,
       actualValue: {
-        creditRating,
+        baseScore,
+        adjustedScore,
+        deltasApplied: scoreCalc?.deltas.map((d) => d.description) ?? [],
         grade: context.creditsafe.creditRatingGrade,
         description: context.creditsafe.creditRatingDescription,
       },
       expectedValue: `>= ${tierThresholds[Tier.POOR].creditRatingMin}`,
+    };
+  },
+};
+
+/**
+ * Helper to convert tier enum to readable string.
+ */
+function tierToString(tier: Tier): string {
+  switch (tier) {
+    case Tier.EXCELLENT:
+      return "EXCELLENT";
+    case Tier.GOOD:
+      return "GOOD";
+    case Tier.FAIR:
+      return "FAIR";
+    case Tier.POOR:
+      return "POOR";
+    default:
+      return "UNKNOWN";
+  }
+}
+
+/**
+ * Rule: NACE/Age restriction check.
+ *
+ * After the credit rating rule determines the tier based on adjusted score,
+ * this rule checks if NACE codes or company age cause reject/manual for that tier.
+ *
+ * This uses the pre-calculated scoreCalculation result.
+ */
+export const naceAgeRestrictionRule: Rule = {
+  id: "nace-age-restriction",
+  category: "company",
+
+  evaluate(context: RuleContext): RuleResult {
+    const scoreCalc = context.scoreCalculation;
+
+    // If no score calculation available, skip this check
+    if (!scoreCalc) {
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.EXCELLENT,
+        passed: true,
+        reason: "No score calculation available - skipping NACE/Age restriction check",
+        actualValue: null,
+        expectedValue: "Score calculation required for restriction check",
+      };
+    }
+
+    // Check for rejection from NACE or Age
+    if (scoreCalc.hasReject) {
+      const rejectDeltas = scoreCalc.deltas.filter((d) => d.delta === "reject");
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.REJECTED,
+        passed: false,
+        reason: rejectDeltas.map((d) => d.description).join("; "),
+        actualValue: {
+          determinedTier: tierToString(scoreCalc.determinedTier),
+          naceRestriction: scoreCalc.naceRestriction,
+          ageRestriction: scoreCalc.ageRestriction,
+          rejectReasons: rejectDeltas.map((d) => d.description),
+        },
+        expectedValue: "No rejection triggers from NACE/Age for this tier",
+      };
+    }
+
+    // Check for manual review from NACE or Age
+    if (scoreCalc.hasManualReview) {
+      const manualDeltas = scoreCalc.deltas.filter((d) => d.delta === "manual");
+      return {
+        ruleId: this.id,
+        category: this.category,
+        tier: Tier.MANUAL_REVIEW,
+        passed: false,
+        reason: manualDeltas.map((d) => d.description).join("; "),
+        actualValue: {
+          determinedTier: tierToString(scoreCalc.determinedTier),
+          naceRestriction: scoreCalc.naceRestriction,
+          ageRestriction: scoreCalc.ageRestriction,
+          manualReviewReasons: manualDeltas.map((d) => d.description),
+        },
+        expectedValue: "No manual review triggers from NACE/Age for this tier",
+      };
+    }
+
+    // No restrictions - pass through with the determined tier
+    return {
+      ruleId: this.id,
+      category: this.category,
+      tier: scoreCalc.determinedTier,
+      passed: true,
+      reason: `No NACE/Age restrictions for ${tierToString(scoreCalc.determinedTier)} tier`,
+      actualValue: {
+        determinedTier: tierToString(scoreCalc.determinedTier),
+        naceRestriction: scoreCalc.naceRestriction,
+        ageRestriction: scoreCalc.ageRestriction,
+      },
+      expectedValue: "No rejection/manual triggers",
     };
   },
 };

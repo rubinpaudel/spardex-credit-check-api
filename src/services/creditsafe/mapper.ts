@@ -1,4 +1,5 @@
 import { CreditsafeCompanyReport } from "./types";
+import { CreditsafeSearchData } from "./client";
 
 /**
  * Our normalized Creditsafe data structure.
@@ -50,6 +51,10 @@ export interface CreditsafeData {
   hasCCJs: boolean; // County Court Judgments
   ccjCount: number;
   hasFinancialDisclosure: boolean; // Has filed financial statements
+
+  // Delta-related fields
+  postalCode: string | null; // From company search result
+  naceCodes: string[]; // From activity classifications
 
   // Raw report for debugging
   _raw?: CreditsafeCompanyReport;
@@ -139,10 +144,34 @@ function normalizeLegalForm(description: string): string {
 }
 
 /**
+ * Extract NACE codes from activity classifications.
+ */
+function extractNaceCodes(report: CreditsafeCompanyReport): string[] {
+  const classifications =
+    report.report.companyIdentification.activityClassifications;
+  if (!classifications) return [];
+
+  const codes: string[] = [];
+  for (const classification of classifications) {
+    for (const activity of classification.activities) {
+      if (activity.code) {
+        codes.push(activity.code);
+      }
+    }
+  }
+  return codes;
+}
+
+/**
  * Map Creditsafe API response to our internal structure.
+ *
+ * @param report - The Creditsafe company report
+ * @param searchData - Optional search data containing postal code
+ * @param includeRaw - Whether to include the raw report for debugging
  */
 export function mapCreditsafeResponse(
   report: CreditsafeCompanyReport,
+  searchData?: CreditsafeSearchData,
   includeRaw: boolean = false
 ): CreditsafeData {
   const r = report.report;
@@ -217,6 +246,10 @@ export function mapCreditsafeResponse(
     hasFinancialDisclosure:
       (r.financialStatements && r.financialStatements.length > 0) ||
       summary.latestShareholdersEquityFigure !== undefined,
+
+    // Delta-related fields
+    postalCode: searchData?.postalCode ?? null,
+    naceCodes: extractNaceCodes(report),
 
     _raw: includeRaw ? report : undefined,
   };

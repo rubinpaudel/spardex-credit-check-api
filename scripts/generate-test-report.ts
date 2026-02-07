@@ -147,6 +147,9 @@ function buildCreditsafeData(user: TestUser): CreditsafeData {
     hasCCJs: false,
     ccjCount: 0,
     hasFinancialDisclosure: mock.hasFinancialDisclosure,
+    // Delta-related fields (default values for test users)
+    postalCode: null,
+    naceCodes: [],
   };
 }
 

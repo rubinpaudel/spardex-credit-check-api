@@ -16,6 +16,7 @@ import {
   vatValidRule,
   companyActiveRule,
   financialDisclosureRule,
+  naceAgeRestrictionRule,
 } from "./categories/company";
 import {
   adminBankruptciesRule,
@@ -58,6 +59,7 @@ export const allRules: Rule[] = [
   vatValidRule,
   companyActiveRule,
   creditRatingRule,
+  naceAgeRestrictionRule, // Must come after creditRatingRule - checks restrictions for determined tier
   companyAgeRule,
   withholdingObligationRule,
   financialDisclosureRule,

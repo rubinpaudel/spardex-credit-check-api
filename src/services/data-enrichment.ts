@@ -5,7 +5,12 @@ import { mapCreditsafeResponse, CreditsafeData } from "./creditsafe/mapper";
 import { validateVatNumber } from "./vies/client";
 import { ViesResult } from "./vies/types";
 import { searchBusinessWithHits } from "./kyc-protect/client";
-import { mapKycProtectResponse, KycProtectData } from "./kyc-protect/mapper";
+import { mapKycProtectResponse } from "./kyc-protect/mapper";
+import { KycProtectData } from "./kyc-protect/types";
+import {
+  calculateAdjustedScore,
+  ScoreCalculationResult,
+} from "./score-calculation";
 
 export interface EnrichmentResult {
   creditsafe: CreditsafeData | null;
@@ -43,7 +48,11 @@ export async function enrichData(vatNumber: string): Promise<EnrichmentResult> {
   // Process Creditsafe result
   if (creditsafeResult.status === "fulfilled") {
     if (creditsafeResult.value) {
-      creditsafe = mapCreditsafeResponse(creditsafeResult.value);
+      // Map response with search data (contains postal code)
+      creditsafe = mapCreditsafeResponse(
+        creditsafeResult.value.report,
+        creditsafeResult.value.searchData
+      );
     } else {
       creditsafeFailed = true;
       errors.push(`Company not found in Creditsafe: ${vatNumber}`);
@@ -115,12 +124,24 @@ export function buildRuleContext(
       }
     : undefined;
 
+  // Calculate adjusted score with deltas if Creditsafe data is available
+  let scoreCalculation: ScoreCalculationResult | undefined;
+  if (enrichment.creditsafe) {
+    scoreCalculation = calculateAdjustedScore({
+      creditRating: enrichment.creditsafe.creditRating,
+      postalCode: enrichment.creditsafe.postalCode,
+      naceCodes: enrichment.creditsafe.naceCodes,
+      companyAgeYears: enrichment.creditsafe.companyAgeYears,
+    });
+  }
+
   return {
     questionnaire: request.questionnaire,
     company: request.company,
     creditsafe: enrichment.creditsafe,
     vies: viesData,
     kycProtect: enrichment.kycProtect,
+    scoreCalculation,
     creditsafeFailed: enrichment.creditsafeFailed,
     viesFailed: enrichment.viesFailed,
     kycProtectFailed: enrichment.kycProtectFailed,

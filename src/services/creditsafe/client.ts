@@ -199,20 +199,48 @@ export async function getCompanyReport(
 }
 
 /**
+ * Search data extracted from company search result.
+ * Contains address info not available in the full report.
+ */
+export interface CreditsafeSearchData {
+  postalCode: string | null;
+  city: string | null;
+}
+
+/**
+ * Combined result containing both report and search data.
+ */
+export interface CreditsafeFullData {
+  report: CreditsafeCompanyReport;
+  searchData: CreditsafeSearchData;
+}
+
+/**
  * Convenience function: Get company report by VAT number.
  * Combines search + report fetch.
  *
  * @param vatNumber - Belgian VAT number
- * @returns Full company report, or null if not found
+ * @returns Full company report with search data, or null if not found
  */
 export async function getCompanyReportByVat(
   vatNumber: string
-): Promise<CreditsafeCompanyReport | null> {
-  const connectId = await getConnectIdByVat(vatNumber);
+): Promise<CreditsafeFullData | null> {
+  const searchResult = await searchCompanyByVat(vatNumber);
 
-  if (!connectId) {
+  if (!searchResult || searchResult.companies.length === 0) {
     return null;
   }
 
-  return getCompanyReport(connectId);
+  const company = searchResult.companies[0];
+  const connectId = company.id;
+
+  // Extract search data (contains postal code)
+  const searchData: CreditsafeSearchData = {
+    postalCode: company.address?.postalCode ?? null,
+    city: company.address?.city ?? null,
+  };
+
+  const report = await getCompanyReport(connectId);
+
+  return { report, searchData };
 }
